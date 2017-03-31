@@ -66,7 +66,11 @@ public class MainActivity extends AppCompatActivity {
         tv_start_day.setText(strCurDate);
         tv_start_time.setText(strCurTime);
         tv_end_day.setText(strCurDate);
-        tv_end_time.setText(strCurTime);
+        if (strCurHour + 3 < 24) {
+            tv_end_time.setText(strCurTime+3);
+        }else{
+            tv_end_time.setText(strCurTime);
+        }
 
         date_dialog = new DatePickerDialog(this, date_listener, strCurYear, strCurMonth, strCurDay);
         time_dialog = new TimePickerDialog(this, time_listener, strCurHour, strCurMinute, false);
@@ -76,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Flag_day = true;
                 date_dialog.show();
-
             }
         });
 
@@ -137,6 +140,10 @@ public class MainActivity extends AppCompatActivity {
         btn_request.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (reason == 0) {
+                    Toast.makeText(getApplicationContext(), "외출사유를 선택하세요", Toast.LENGTH_SHORT).show();
+                    return ;
+                }
                 Toast.makeText(getApplicationContext(), "시작: " + start_year + "/" + start_month + "/" + start_day + "/" + start_hour + "/" + start_minute, Toast.LENGTH_SHORT).show();
                 Toast.makeText(getApplicationContext(), "종료: " + end_year + "/" + end_month + "/" + end_day + "/" + end_hour + "/" + end_minute, Toast.LENGTH_SHORT).show();
                 Toast.makeText(getApplicationContext(), "사유: " + reason, Toast.LENGTH_SHORT).show();

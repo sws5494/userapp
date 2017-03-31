@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f2f2f2"
+    android:background="@color/color_white_gray"
     android:gravity="center"
     android:orientation="vertical">
 
@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:layout_weight="2"
-        android:background="#ffffff"
+        android:background="@color/color_white"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="10dp">
@@ -44,7 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="#f2f2f2"
+                android:background="@color/color_white_gray"
                 android:gravity="center"
                 android:padding="5dp"
                 android:textSize="20dp" />
@@ -54,7 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="5dp"
-            android:background="#f2f2f2" />
+            android:background="@color/color_white_gray" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
                 android:layout_weight="3"
-                android:background="#f2f2f2"
+                android:background="@color/color_white_gray"
                 android:gravity="center"
                 android:padding="5dp"
                 android:textSize="20dp" />
@@ -85,7 +85,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="#f2f2f2"
+                android:background="@color/color_white_gray"
                 android:gravity="center"
                 android:padding="5dp"
                 android:textSize="20dp" />
@@ -97,7 +97,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:layout_weight="4"
-        android:background="#ffffff"
+        android:background="@color/color_white"
         android:gravity="top"
         android:orientation="vertical"
         android:padding="10dp">
@@ -119,33 +119,33 @@
                 android:id="@+id/btn_work"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#f2f2f2"
+                android:background="@color/color_white_gray"
                 android:text="@string/app_work"
                 android:textSize="20dp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#f9f9f9" />
+                android:background="@color/color_view" />
 
             <Button
                 android:id="@+id/btn_eat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#f2f2f2"
+                android:background="@color/color_white_gray"
                 android:text="@string/app_eat"
                 android:textSize="20dp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#f2f2f2" />
+                android:background="@color/color_white_gray" />
 
             <Button
                 android:id="@+id/btn_etc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#f2f2f2"
+                android:background="@color/color_white_gray"
                 android:text="@string/app_etc"
                 android:textSize="20dp" />
 
@@ -170,7 +170,7 @@
             android:id="@+id/btn_request"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#fae100"
+            android:background="@color/color_request"
             android:text="@string/app_request"
             android:textSize="20dp"
             android:textStyle="bold" />
