@@ -2,17 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="#f2f2f2"
     android:gravity="center"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_margin="10dp"
         android:layout_weight="2"
+        android:background="#ffffff"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,7 +25,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="시작"
+                android:text="@string/app_start"
                 android:textSize="20dp" />
 
             <TextView
@@ -48,17 +50,23 @@
                 android:textSize="20dp" />
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:background="#f2f2f2" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="종료"
+                android:text="@string/app_end"
                 android:textSize="20dp" />
 
             <TextView
@@ -87,54 +95,67 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:layout_weight="4"
+        android:background="#ffffff"
         android:gravity="top"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#f2f2f2"
             android:gravity="center"
-            android:orientation="vertical"
-            android:layout_margin="10dp">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:text="외출사유"
+                android:layout_marginBottom="15dp"
+                android:text="@string/app_reason"
                 android:textSize="15dp" />
 
             <Button
                 android:id="@+id/btn_work"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#ffffff"
-                android:text="1. 업무"
+                android:background="#f2f2f2"
+                android:text="@string/app_work"
                 android:textSize="20dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#f9f9f9" />
 
             <Button
                 android:id="@+id/btn_eat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#ffffff"
-                android:text="2. 식사"
+                android:background="#f2f2f2"
+                android:text="@string/app_eat"
                 android:textSize="20dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#f2f2f2" />
 
             <Button
                 android:id="@+id/btn_etc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#ffffff"
-                android:text="3. 기타"
+                android:background="#f2f2f2"
+                android:text="@string/app_etc"
                 android:textSize="20dp" />
 
             <EditText
+                android:id="@+id/edt_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:hint="직접입력..." />
+                android:hint="@string/app_input"
+                android:maxLength="55" />
         </LinearLayout>
     </LinearLayout>
 
@@ -146,10 +167,12 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/btn_request"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="#fae100"
-            android:text="신청하기"
-            android:textSize="20dp" />
+            android:text="@string/app_request"
+            android:textSize="20dp"
+            android:textStyle="bold" />
     </LinearLayout>
 </LinearLayout>
