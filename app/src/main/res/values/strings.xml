@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_name">user app</string>
     <string name="app_start">시작</string>
     <string name="app_end">종료</string>
     <string name="app_reason">외출사유</string>
@@ -6,5 +7,8 @@
     <string name="app_eat">2. 식사</string>
     <string name="app_etc">3. 기타</string>
     <string name="app_input">직접입력...</string>
-    <string name="app_request">신청하기</string>
+    <string name="app_request">외출신청</string>
+    <string name="tab_request">외출신청</string>
+    <string name="tab_list">외출내역</string>
+    <string name="action_settings">action_settings</string>
 </resources>

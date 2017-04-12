@@ -1,178 +1,213 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_white_gray"
-    android:gravity="center"
     android:orientation="vertical">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:layout_weight="2"
-        android:background="@color/color_white"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="10dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/app_start"
-                android:textSize="20dp" />
-
-            <TextView
-                android:id="@+id/start_day"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:layout_weight="3"
-                android:background="#f2f2f2"
-                android:gravity="center"
-                android:padding="5dp"
-                android:textSize="20dp" />
-
-            <TextView
-                android:id="@+id/start_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/color_white_gray"
-                android:gravity="center"
-                android:padding="5dp"
-                android:textSize="20dp" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="5dp"
-            android:background="@color/color_white_gray" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/app_end"
-                android:textSize="20dp" />
-
-            <TextView
-                android:id="@+id/end_day"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:layout_weight="3"
-                android:background="@color/color_white_gray"
-                android:gravity="center"
-                android:padding="5dp"
-                android:textSize="20dp" />
-
-            <TextView
-                android:id="@+id/end_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/color_white_gray"
-                android:gravity="center"
-                android:padding="5dp"
-                android:textSize="20dp" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:layout_weight="4"
-        android:background="@color/color_white"
-        android:gravity="top"
-        android:orientation="vertical"
-        android:padding="10dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:text="@string/app_reason"
-                android:textSize="15dp" />
-
-            <Button
-                android:id="@+id/btn_work"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/color_white_gray"
-                android:text="@string/app_work"
-                android:textSize="20dp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/color_view" />
-
-            <Button
-                android:id="@+id/btn_eat"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/color_white_gray"
-                android:text="@string/app_eat"
-                android:textSize="20dp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/color_white_gray" />
-
-            <Button
-                android:id="@+id/btn_etc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/color_white_gray"
-                android:text="@string/app_etc"
-                android:textSize="20dp" />
-
-            <EditText
-                android:id="@+id/edt_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:hint="@string/app_input"
-                android:maxLength="55" />
-        </LinearLayout>
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tab_request"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/color_white_gray"
+            android:gravity="center"
+            android:text="@string/tab_request" />
+
+        <TextView
+            android:id="@+id/tab_list"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/color_white"
+            android:gravity="center"
+            android:text="@string/tab_list" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/boss_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:background="@color/color_white_gray"
+        android:gravity="center"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btn_request"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/color_request"
-            android:text="@string/app_request"
-            android:textSize="20dp"
-            android:textStyle="bold" />
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="2"
+            android:background="@color/color_white"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/app_start"
+                    android:textSize="@dimen/text_20" />
+
+                <TextView
+                    android:id="@+id/start_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="3"
+                    android:background="@color/color_white_gray"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:textSize="@dimen/text_20" />
+
+                <TextView
+                    android:id="@+id/start_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/color_white_gray"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:textSize="@dimen/text_20" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/color_white_gray" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/app_end"
+                    android:textSize="@dimen/text_20" />
+
+                <TextView
+                    android:id="@+id/end_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="3"
+                    android:background="@color/color_white_gray"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:textSize="@dimen/text_20" />
+
+                <TextView
+                    android:id="@+id/end_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/color_white_gray"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:textSize="@dimen/text_20" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="4"
+            android:background="@color/color_white"
+            android:gravity="top"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:text="@string/app_reason"
+                    android:textSize="15dp" />
+
+                <Button
+                    android:id="@+id/btn_work"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/color_white_gray"
+                    android:text="@string/app_work"
+                    android:textSize="@dimen/text_20" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_view" />
+
+                <Button
+                    android:id="@+id/btn_eat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/color_white_gray"
+                    android:text="@string/app_eat"
+                    android:textSize="@dimen/text_20" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_view" />
+
+                <Button
+                    android:id="@+id/btn_etc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/color_white_gray"
+                    android:text="@string/app_etc"
+                    android:textSize="@dimen/text_20" />
+
+                <EditText
+                    android:id="@+id/edt_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:hint="@string/app_input"
+                    android:maxLength="55" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_request"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/color_request"
+                android:text="@string/app_request"
+                android:textSize="@dimen/text_20"
+                android:textStyle="bold" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
