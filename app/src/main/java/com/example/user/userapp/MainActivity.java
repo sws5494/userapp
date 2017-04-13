@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -53,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     TextView tab_request, tab_list;
     TextView tv_start_day, tv_start_time, tv_end_day, tv_end_time;
+
+    EditText edt_input;
 
     Button btn_work, btn_eat, btn_etc, btn_request;
 
@@ -94,6 +97,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         tv_start_time = (TextView) findViewById(R.id.start_time);
         tv_end_day = (TextView) findViewById(R.id.end_day);
         tv_end_time = (TextView) findViewById(R.id.end_time);
+
+        edt_input = (EditText) findViewById(R.id.edt_input);
 
         btn_work = (Button) findViewById(R.id.btn_work);
         btn_eat = (Button) findViewById(R.id.btn_eat);
@@ -198,6 +203,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 btn_eat.setBackgroundColor(Color.rgb(255, 255, 255));
                 btn_etc.setBackgroundColor(Color.rgb(255, 255, 255));
                 btn_work.setBackgroundColor(Color.rgb(217, 217, 217));
+                edt_input.setHint("");
+                edt_input.setEnabled(false);
             }
         });
 
@@ -208,6 +215,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 btn_work.setBackgroundColor(Color.rgb(255, 255, 255));
                 btn_etc.setBackgroundColor(Color.rgb(255, 255, 255));
                 btn_eat.setBackgroundColor(Color.rgb(217, 217, 217));
+                edt_input.setHint("");
+                edt_input.setEnabled(false);
             }
         });
 
@@ -218,6 +227,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 btn_work.setBackgroundColor(Color.rgb(255, 255, 255));
                 btn_eat.setBackgroundColor(Color.rgb(255, 255, 255));
                 btn_etc.setBackgroundColor(Color.rgb(217, 217, 217));
+                edt_input.setEnabled(true);
+                edt_input.setHint("직접입력...");
             }
         });
 
@@ -231,6 +242,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 Toast.makeText(getApplicationContext(), "시작: " + start_year + "/" + start_month + "/" + start_day + "/" + start_hour + "/" + start_minute, Toast.LENGTH_SHORT).show();
                 Toast.makeText(getApplicationContext(), "종료: " + end_year + "/" + end_month + "/" + end_day + "/" + end_hour + "/" + end_minute, Toast.LENGTH_SHORT).show();
                 Toast.makeText(getApplicationContext(), "사유: " + reason, Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -250,7 +262,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         } else {
             onAccessFineLocationPermissionGranted();
         }
-        onDeleteAllClicked();
         onCustomClicked();
     } //end oncreate
 
@@ -296,12 +307,17 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         }
     };
 
+    public void onBackPressed() {
+        onDeleteAllClicked();
+        super.onBackPressed();
+    }
+
+
     /*****************************************************************************************************************************/
 
     @Override
     protected void onResume() {
         super.onResume();
-
     }
 
     @Override
