@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -22,6 +23,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -33,14 +35,21 @@ import com.sousoum.libgeofencehelper.StorableGeofenceManager;
 
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,9 +59,10 @@ import java.util.List;
 import static java.net.Proxy.Type.HTTP;
 
 public class MainActivity extends AppCompatActivity implements LocationListener, StorableGeofenceManager.StorableGeofenceManagerListener {
-    LinearLayout boss_layout;
+    LinearLayout tab_req_lay, tab_list_lay;
 
     TextView tab_request, tab_list;
+//    TextView tab_request2, tab_list2;
     TextView tv_start_day, tv_start_time, tv_end_day, tv_end_time;
 
     EditText edt_input;
@@ -67,6 +77,19 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     int reason;
 
     boolean Flag_day, Flag_time;
+
+    ListView listview;
+    ListViewAdapter adapter;
+
+    ArrayList<String> title = new ArrayList<>();
+    ArrayList<String> description = new ArrayList<>();
+
+    /**/
+
+    BackgroundTask task;
+    String address, result;
+
+    /**/
 
     /*************************************************************************************************************/
 
@@ -88,10 +111,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        boss_layout = (LinearLayout) findViewById(R.id.boss_layout);
+        tab_req_lay = (LinearLayout) findViewById(R.id.tab_req_lay);
+        tab_list_lay = (LinearLayout) findViewById(R.id.tab_list_lay);
 
         tab_request = (TextView) findViewById(R.id.tab_request);
+//        tab_request2 = (TextView) findViewById(R.id.tab_request2);
         tab_list = (TextView) findViewById(R.id.tab_list);
+//        tab_list2 = (TextView) findViewById(R.id.tab_list2);
 
         tv_start_day = (TextView) findViewById(R.id.start_day);
         tv_start_time = (TextView) findViewById(R.id.start_time);
@@ -104,6 +130,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         btn_eat = (Button) findViewById(R.id.btn_eat);
         btn_etc = (Button) findViewById(R.id.btn_etc);
         btn_request = (Button) findViewById(R.id.btn_request);
+
+        adapter = new ListViewAdapter();
+        listview = (ListView) findViewById(R.id.listview1);
+        listview.setAdapter(adapter);
 
         long now = System.currentTimeMillis();
         Date date = new Date(now);
@@ -125,21 +155,25 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         int strCurHour = Integer.parseInt(CurHourFormat.format(date));
         int strCurMinute = Integer.parseInt(CurMinuteFormat.format(date));
 
+        tab_list_lay.setEnabled(false);
+
         tab_request.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tab_request.setBackgroundColor(Color.rgb(242, 242, 242));
+                tab_request.setBackgroundColor(Color.rgb(222, 222, 222));
                 tab_list.setBackgroundColor(Color.rgb(255, 255, 255));
-                boss_layout.setVisibility(View.VISIBLE);
+                tab_req_lay.setVisibility(View.VISIBLE);
+                tab_list_lay.setVisibility(View.GONE);
             }
         });
 
         tab_list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tab_list.setBackgroundColor(Color.rgb(242, 242, 242));
+                tab_list.setBackgroundColor(Color.rgb(222, 222, 222));
                 tab_request.setBackgroundColor(Color.rgb(255, 255, 255));
-                boss_layout.setVisibility(View.INVISIBLE);
+                tab_req_lay.setVisibility(View.GONE);
+                tab_list_lay.setVisibility(View.VISIBLE);
             }
         });
 
@@ -262,7 +296,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         } else {
             onAccessFineLocationPermissionGranted();
         }
+
         onCustomClicked();
+        dataget();
     } //end oncreate
 
     private DatePickerDialog.OnDateSetListener date_listener = new DatePickerDialog.OnDateSetListener() {
@@ -414,7 +450,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 //                mCurrentLocation.getLongitude(),
                 35.145124,
                 129.009541,
-                200,
+                50,
                 Geofence.NEVER_EXPIRE,
                 300000, // 5 minutes
                 Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT | Geofence.GEOFENCE_TRANSITION_DWELL,
@@ -472,4 +508,76 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         Toast.makeText(this, "Please enable your gps", Toast.LENGTH_SHORT).show();
     }
 
+
+    class BackgroundTask extends AsyncTask<Integer, Integer, Integer> {
+        protected void onPreExecute() {
+            address = "http://192.168.64.166:3000/data";
+        }
+
+        @Override
+        protected Integer doInBackground(Integer... arg0) {
+            // TODO Auto-generated method stub
+            result = request(address);
+            return null;
+        }
+
+        protected void onPostExecute(Integer a) {
+            Log.d("TAG", result);
+        }
+
+    }
+
+    public void dataget() {
+        // TODO Auto-generated method stub
+        task = new BackgroundTask();
+        task.execute();
+    }
+
+    private String request(String urlStr) {
+        StringBuilder output = new StringBuilder();
+        try {
+            URL url = new URL(urlStr);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            if (conn != null) {
+                conn.setConnectTimeout(10000);
+                conn.setRequestMethod("GET");
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+                int resCode = conn.getResponseCode();
+                if (resCode == HttpURLConnection.HTTP_OK) {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    String line = null;
+                    while (true) {
+                        line = reader.readLine();
+                        if (line == null) {
+                            break;
+                        }
+//                        output.append(line + "\n");
+                        Log.d("TAG", line);
+                        try {
+                            JSONArray jsonArray = new JSONArray(line);
+                            Log.d("TAG", "" + jsonArray.length());
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                title.add(jsonObject.getString("title"));
+                                description.add(jsonObject.getString("description"));
+                                adapter.addItem(ContextCompat.getDrawable(this, R.drawable.default_notif),
+                                        title.get(i), description.get(i));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    reader.close();
+                    conn.disconnect();
+                }
+            }
+
+        } catch (Exception ex) {
+            Log.e("SampleHTTP", "Exception in processing response.", ex);
+            ex.printStackTrace();
+        }
+
+        return output.toString();
+    }
 }
