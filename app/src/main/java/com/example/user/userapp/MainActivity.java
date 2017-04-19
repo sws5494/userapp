@@ -6,6 +6,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -19,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -87,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     /**/
 
     BackgroundTask task;
+    BackgroundTask2 task2;
+
     String address, result;
 
     /**/
@@ -156,6 +160,18 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         int strCurMinute = Integer.parseInt(CurMinuteFormat.format(date));
 
         tab_list_lay.setEnabled(false);
+
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ListViewItem item = (ListViewItem)parent.getItemAtPosition(position);
+
+                String titleStr = item.getTitle();
+                String descStr = item.getDesc();
+                Drawable iconDrawable = item.getIcon();
+                Toast.makeText(getApplicationContext(), titleStr+descStr, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         tab_request.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -273,6 +289,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                     Toast.makeText(getApplicationContext(), "외출사유를 선택하세요", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                datapost();
                 Toast.makeText(getApplicationContext(), "시작: " + start_year + "/" + start_month + "/" + start_day + "/" + start_hour + "/" + start_minute, Toast.LENGTH_SHORT).show();
                 Toast.makeText(getApplicationContext(), "종료: " + end_year + "/" + end_month + "/" + end_day + "/" + end_hour + "/" + end_minute, Toast.LENGTH_SHORT).show();
                 Toast.makeText(getApplicationContext(), "사유: " + reason, Toast.LENGTH_SHORT).show();
@@ -410,7 +427,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 }
             }
 
-            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1, this);
+            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, this);
         }
     }
 
@@ -524,7 +541,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         protected void onPostExecute(Integer a) {
             Log.d("TAG", result);
         }
-
     }
 
     public void dataget() {
@@ -568,6 +584,79 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                             e.printStackTrace();
                         }
                     }
+                    reader.close();
+                    conn.disconnect();
+                }
+            }
+
+        } catch (Exception ex) {
+            Log.e("SampleHTTP", "Exception in processing response.", ex);
+            ex.printStackTrace();
+        }
+
+        return output.toString();
+    }
+
+    /*********************************************************************************************************************************/
+
+    class BackgroundTask2 extends AsyncTask<Integer, Integer, Integer> {
+        protected void onPreExecute() {
+            address = "http://192.168.64.166:3000/data_insert?start_time="+start_year+start_month+start_day+start_hour+start_minute;
+        }
+
+        @Override
+        protected Integer doInBackground(Integer... arg0) {
+            // TODO Auto-generated method stub
+            result = request_insert(address);
+            return null;
+        }
+
+        protected void onPostExecute(Integer a) {
+            Log.d("TAG", result);
+        }
+    }
+
+    public void datapost() {
+        // TODO Auto-generated method stub
+        task2 = new BackgroundTask2();
+        task2.execute();
+    }
+
+    private String request_insert(String urlStr) {
+        StringBuilder output = new StringBuilder();
+        try {
+            URL url = new URL(urlStr);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            if (conn != null) {
+                conn.setConnectTimeout(10000);
+                conn.setRequestMethod("POST");
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+                int resCode = conn.getResponseCode();
+                if (resCode == HttpURLConnection.HTTP_OK) {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    String line = null;
+                    /*while (true) {
+                        line = reader.readLine();
+                        if (line == null) {
+                            break;
+                        }
+//                        output.append(line + "\n");
+                        Log.d("TAG", line);
+                        try {
+                            JSONArray jsonArray = new JSONArray(line);
+                            Log.d("TAG", "" + jsonArray.length());
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                title.add(jsonObject.getString("title"));
+                                description.add(jsonObject.getString("description"));
+                                adapter.addItem(ContextCompat.getDrawable(this, R.drawable.default_notif),
+                                        title.get(i), description.get(i));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }*/
                     reader.close();
                     conn.disconnect();
                 }
