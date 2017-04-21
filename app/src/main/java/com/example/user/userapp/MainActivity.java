@@ -79,8 +79,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     ListView listview;
     ListViewAdapter adapter;
 
-    ArrayList<String> title = new ArrayList<>();
-    ArrayList<String> description = new ArrayList<>();
+    ArrayList<String> set_identifier = new ArrayList<>();
+    ArrayList<String> set_startday = new ArrayList<>();
+    ArrayList<String> set_starTtime = new ArrayList<>();
+    ArrayList<String> set_endday = new ArrayList<>();
+    ArrayList<String> set_starttime = new ArrayList<>();
+    ArrayList<String> set_reason = new ArrayList<>();
+    ArrayList<String> set_time = new ArrayList<>();
 
 //    BackgroundTask task;
 //    BackgroundTask2 task2;
@@ -281,9 +286,24 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                     Toast.makeText(getApplicationContext(), "외출사유를 선택하세요", Toast.LENGTH_SHORT).show();
                     return;
                 }*/
-                flag="INSERT";
+                flag = "INSERT";
 //                dataget();
-                insert();
+                long now = System.currentTimeMillis();
+                Date date = new Date(now);
+                SimpleDateFormat sdfNow = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat sdfNow2 = new SimpleDateFormat("HH:mm:ss");
+                String strNow = sdfNow.format(date);
+                String strNow2 = sdfNow2.format(date);
+
+                String identifier = GetDevicesUUID(MainActivity.this);
+
+                String startDay = start_year + "-" + start_month + "-" + start_day;
+                String startTime = start_hour + "-" + start_minute;
+                String endDay = end_year + "-" + end_month + "-" + end_day;
+                String endTime = end_hour + "-" + end_minute;
+
+                insert("http://192.168.64.166:3000/request?identifier=" + identifier + "&" + "startday=" + startDay + "&" + "starttime=" + startTime+"&"+"endday="+endDay+"&"+"endtime="+endTime+"&"+"reason="+reason+"&"+"time="+strNow+"&"+"time2="+strNow2);
+
                 Toast.makeText(getApplicationContext(), "시작: " + start_year + "/" + start_month + "/" + start_day + "/" + start_hour + "/" + start_minute, Toast.LENGTH_SHORT).show();
                 Toast.makeText(getApplicationContext(), "종료: " + end_year + "/" + end_month + "/" + end_day + "/" + end_hour + "/" + end_minute, Toast.LENGTH_SHORT).show();
                 Toast.makeText(getApplicationContext(), "사유: " + reason, Toast.LENGTH_SHORT).show();
@@ -306,6 +326,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         }
 
         onCustomClicked();
+        insert("http://192.168.64.166:3000/data");
 //        dataget();
     } //end oncreate
 
@@ -457,7 +478,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 //                mCurrentLocation.getLongitude(),
                 35.145124,
                 129.009541,
-                50,
+                200,
                 Geofence.NEVER_EXPIRE,
                 300000, // 5 minutes
                 Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT | Geofence.GEOFENCE_TRANSITION_DWELL,
@@ -526,70 +547,67 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         return deviceId;
     }
 
-    public void insert(){
-        insertToDatabase("name", "address");
+    public void insert(String link) {
+        insertToDatabase(link);
     }
 
-    private void insertToDatabase(String name, String address){
+    private void insertToDatabase(String link) {
 
-        class InsertData extends AsyncTask<String, Void, String>{
-//            ProgressDialog loading;
-
+        class InsertData extends AsyncTask<String, Void, String> {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-//                loading = ProgressDialog.show(MainActivity.this, "Please Wait", null, true, true);
             }
 
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-//                loading.dismiss();
-                Toast.makeText(getApplicationContext(),s,Toast.LENGTH_LONG).show();
             }
 
             @Override
             protected String doInBackground(String... params) {
-                try{
-                    String name = (String)params[0];
-                    String address = (String)params[1];
-
-                    String identifier = GetDevicesUUID(MainActivity.this);
-                    String link="http://192.168.64.166:3000/data";
-                    String data  = URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(name, "UTF-8");
-                    data += "&" + URLEncoder.encode("address", "UTF-8") + "=" + URLEncoder.encode(address, "UTF-8");
-
+                try {
+                    String link = (String) params[0];
+                    Log.d("TAGlink", link);
                     URL url = new URL(link);
                     URLConnection conn = url.openConnection();
 
                     conn.setDoOutput(true);
-                    OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-
-                    wr.write( data );
-                    wr.flush();
-
                     BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
                     StringBuilder sb = new StringBuilder();
                     String line = null;
 
-                    // Read Server Response
-                    while((line = reader.readLine()) != null)
-                    {
+                    while ((line = reader.readLine()) != null) {
                         sb.append(line);
                         break;
                     }
+
+                    try {
+                        JSONArray jsonArray = new JSONArray(line);
+                        Log.d("TAG", "" + jsonArray.length());
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            set_identifier.add(jsonObject.getString("identifier"));
+                            set_time.add(jsonObject.getString("time"));
+                            adapter.addItem(ContextCompat.getDrawable(MainActivity.this, R.drawable.default_notif),
+                                    set_identifier.get(i), set_time.get(i));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                     Log.d("TAG", sb.toString());
                     return sb.toString();
-                }
-                catch(Exception e){
+
+                } catch (Exception e) {
                     return new String("Exception: " + e.getMessage());
                 }
             }
         }
 
         InsertData task = new InsertData();
-        task.execute(name,address);
+        task.execute(link);
     }
 
 
