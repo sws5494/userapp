@@ -7,25 +7,25 @@ import android.graphics.drawable.Drawable;
  */
 
 public class ListViewItem {
-    private Drawable iconDrawable ;
-    private String titleStr ;
+    private String reason ;
+    private String start ;
     private String descStr ;
 
-    public void setIcon(Drawable icon) {
-        iconDrawable = icon ;
+    public void setReason(String _reason) {
+        reason = _reason ;
     }
-    public void setTitle(String title) {
-        titleStr = title ;
+    public void setStart(String _start) {
+        start = _start ;
     }
     public void setDesc(String desc) {
         descStr = desc ;
     }
 
-    public Drawable getIcon() {
-        return this.iconDrawable ;
+    public String getReason() {
+        return this.reason ;
     }
-    public String getTitle() {
-        return this.titleStr ;
+    public String getStart() {
+        return this.start ;
     }
     public String getDesc() {
         return this.descStr ;

@@ -4,36 +4,41 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-    <ImageView
-        android:id="@+id/imageView1"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="1" />
+        android:background="@color/color_white_gray_gray"
+        android:gravity="center"
+        android:text="외출\n시간" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="4"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/tv_start"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:gravity="center_vertical"
-            android:text="New Text"
-            android:textColor="#000000"
-            android:textSize="24dp" />
+            android:gravity="center" />
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="New Text"
-            android:textColor="#666666"
-            android:textSize="16dp" />
+            android:gravity="center" />
     </LinearLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@color/color_white_gray_gray"
+        android:gravity="center"
+        android:text="외출\n사유" />
+
+    <TextView
+        android:id="@+id/tv_reason"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center" />
 </LinearLayout>

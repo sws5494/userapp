@@ -9,6 +9,6 @@
     <string name="app_etc">3. 기타</string>
     <string name="app_request">외출신청</string>
     <string name="tab_request">외출신청</string>
-    <string name="tab_list">외출내역</string>
+    <string name="tab_list">신청내역</string>
     <string name="action_settings">action_settings</string>
 </resources>

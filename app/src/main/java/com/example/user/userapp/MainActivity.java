@@ -81,9 +81,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     ArrayList<String> set_identifier = new ArrayList<>();
     ArrayList<String> set_startday = new ArrayList<>();
-    ArrayList<String> set_starTtime = new ArrayList<>();
-    ArrayList<String> set_endday = new ArrayList<>();
     ArrayList<String> set_starttime = new ArrayList<>();
+    ArrayList<String> set_endday = new ArrayList<>();
+    ArrayList<String> set_endtime = new ArrayList<>();
     ArrayList<String> set_reason = new ArrayList<>();
     ArrayList<String> set_time = new ArrayList<>();
 
@@ -163,10 +163,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ListViewItem item = (ListViewItem) parent.getItemAtPosition(position);
-                String titleStr = item.getTitle();
+                String start = item.getStart();
                 String descStr = item.getDesc();
-                Drawable iconDrawable = item.getIcon();
-                Toast.makeText(getApplicationContext(), titleStr + descStr, Toast.LENGTH_SHORT).show();
+                String reason= item.getReason();
+//                Toast.makeText(getApplicationContext(), start + descStr, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -193,7 +193,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         tv_start_day.setText(strCurDate);
         tv_start_time.setText(strCurTime);
         tv_end_day.setText(strCurDate);
-        if (strCurHour + 3 < 24) {
+        tv_end_time.setText(strCurTime);
+        /*if (strCurHour + 3 < 24) {
             int real_strCurHour = strCurHour + 3;
             if (0 < strCurMinute && strCurMinute < 10) {
                 tv_end_time.setText("" + real_strCurHour + "시 " + "0" + strCurMinute + "분");
@@ -206,9 +207,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             } else {
                 tv_end_time.setText("" + strCurHour + "시 " + strCurMinute + "분");
             }
-        }
+        }*/
 
-        date_dialog = new DatePickerDialog(this, date_listener, strCurYear, strCurMonth, strCurDay);
+        date_dialog = new DatePickerDialog(this, date_listener, strCurYear, strCurMonth-1, strCurDay);
         time_dialog = new TimePickerDialog(this, time_listener, strCurHour, strCurMinute, false);
 
         tv_start_day.setOnClickListener(new View.OnClickListener() {
@@ -286,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                     Toast.makeText(getApplicationContext(), "외출사유를 선택하세요", Toast.LENGTH_SHORT).show();
                     return;
                 }*/
-                flag = "INSERT";
+//                flag = "INSERT";
 //                dataget();
                 long now = System.currentTimeMillis();
                 Date date = new Date(now);
@@ -297,16 +298,16 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
                 String identifier = GetDevicesUUID(MainActivity.this);
 
-                String startDay = start_year + "-" + start_month + "-" + start_day;
-                String startTime = start_hour + "-" + start_minute;
-                String endDay = end_year + "-" + end_month + "-" + end_day;
-                String endTime = end_hour + "-" + end_minute;
+                String startDay = start_year + "/" + start_month + "/" + start_day;
+                String startTime = start_hour + ":" + start_minute;
+                String endDay = end_year + "/" + end_month + "/" + end_day;
+                String endTime = end_hour + ":" + end_minute;
 
-                insert("http://192.168.64.166:3000/request?identifier=" + identifier + "&" + "startday=" + startDay + "&" + "starttime=" + startTime+"&"+"endday="+endDay+"&"+"endtime="+endTime+"&"+"reason="+reason+"&"+"time="+strNow+"&"+"time2="+strNow2);
+                insert("http://192.168.64.166:3000/request?identifier=" + identifier + "&" + "startday=" + startDay + "&" + "starttime=" + startTime + "&" + "endday=" + endDay + "&" + "endtime=" + endTime + "&" + "reason=" + reason + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
 
-                Toast.makeText(getApplicationContext(), "시작: " + start_year + "/" + start_month + "/" + start_day + "/" + start_hour + "/" + start_minute, Toast.LENGTH_SHORT).show();
-                Toast.makeText(getApplicationContext(), "종료: " + end_year + "/" + end_month + "/" + end_day + "/" + end_hour + "/" + end_minute, Toast.LENGTH_SHORT).show();
-                Toast.makeText(getApplicationContext(), "사유: " + reason, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "시작: " + start_year + "/" + start_month + "/" + start_day + "/" + start_hour + "/" + start_minute, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "종료: " + end_year + "/" + end_month + "/" + end_day + "/" + end_hour + "/" + end_minute, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "사유: " + reason, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -588,10 +589,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                         Log.d("TAG", "" + jsonArray.length());
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            set_identifier.add(jsonObject.getString("identifier"));
-                            set_time.add(jsonObject.getString("time"));
-                            adapter.addItem(ContextCompat.getDrawable(MainActivity.this, R.drawable.default_notif),
-                                    set_identifier.get(i), set_time.get(i));
+                            set_startday.add(jsonObject.getString("startday"));
+                            set_starttime.add(jsonObject.getString("starttime"));
+                            set_endday.add(jsonObject.getString("endday"));
+                            set_endtime.add(jsonObject.getString("endtime"));
+
+                            set_reason.add(jsonObject.getString("reason"));
+                            adapter.addItem(set_startday.get(i) + " " + set_starttime.get(i), set_endday.get(i) + " " + set_endtime.get(i), set_reason.get(i));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

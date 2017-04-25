@@ -80,9 +80,8 @@
 
                 <TextView
                     android:id="@+id/start_time"
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:background="@color/color_white_gray"
                     android:gravity="center"
                     android:padding="5dp"
@@ -121,9 +120,8 @@
 
                 <TextView
                     android:id="@+id/end_time"
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:background="@color/color_white_gray"
                     android:gravity="center"
                     android:padding="5dp"
