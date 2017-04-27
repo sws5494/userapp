@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="@string/app_time"
+            android:text=""
             android:textSize="15dp" />
 
         <LinearLayout
@@ -133,7 +133,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="@string/app_reason"
+            android:text=""
             android:textSize="15dp" />
 
         <LinearLayout
@@ -209,9 +209,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/color_request"
+                android:enabled="false"
                 android:text="@string/app_request"
-                android:textSize="@dimen/text_20"
-                android:textStyle="bold" />
+                android:textSize="@dimen/text_20" />
         </LinearLayout>
     </LinearLayout>
 
@@ -222,6 +222,11 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:visibility="gone">
+
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/color_white_gray_gray"
+            android:layout_height="5dp"/>
 
         <ListView
             android:id="@+id/listview1"

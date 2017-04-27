@@ -42,7 +42,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.EOFException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -55,6 +58,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity implements LocationListener, StorableGeofenceManager.StorableGeofenceManagerListener {
     LinearLayout tab_req_lay, tab_list_lay;
@@ -72,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     int start_year, start_month, start_day, start_hour, start_minute;
     int end_year, end_month, end_day, end_hour, end_minute;
-    int reason;
+    String reason = null;
 
     boolean Flag_day, Flag_time;
 
@@ -85,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     ArrayList<String> set_endday = new ArrayList<>();
     ArrayList<String> set_endtime = new ArrayList<>();
     ArrayList<String> set_reason = new ArrayList<>();
+    ArrayList<String> set_allow = new ArrayList<>();
     ArrayList<String> set_time = new ArrayList<>();
 
 //    BackgroundTask task;
@@ -92,6 +97,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     String address, result;
     String flag = "SELECT";
+
+    JSONArray ja;
+    Thread thread;
+    private boolean stopflag = false;
 
     /*************************************************************************************************************/
 
@@ -165,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 ListViewItem item = (ListViewItem) parent.getItemAtPosition(position);
                 String start = item.getStart();
                 String descStr = item.getDesc();
-                String reason= item.getReason();
+                String reason = item.getReason();
 //                Toast.makeText(getApplicationContext(), start + descStr, Toast.LENGTH_SHORT).show();
             }
         });
@@ -209,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             }
         }*/
 
-        date_dialog = new DatePickerDialog(this, date_listener, strCurYear, strCurMonth-1, strCurDay);
+        date_dialog = new DatePickerDialog(this, date_listener, strCurYear, strCurMonth - 1, strCurDay);
         time_dialog = new TimePickerDialog(this, time_listener, strCurHour, strCurMinute, false);
 
         tv_start_day.setOnClickListener(new View.OnClickListener() {
@@ -247,10 +256,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         btn_work.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                reason = 1;
+                reason = "업무";
                 btn_eat.setBackgroundColor(Color.rgb(255, 255, 255));
                 btn_etc.setBackgroundColor(Color.rgb(255, 255, 255));
                 btn_work.setBackgroundColor(Color.rgb(217, 217, 217));
+                btn_request.setEnabled(true);
                 edt_input.setHint("");
                 edt_input.setEnabled(false);
             }
@@ -259,10 +269,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         btn_eat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                reason = 2;
+                reason = "식사";
                 btn_work.setBackgroundColor(Color.rgb(255, 255, 255));
                 btn_etc.setBackgroundColor(Color.rgb(255, 255, 255));
                 btn_eat.setBackgroundColor(Color.rgb(217, 217, 217));
+                btn_request.setEnabled(true);
                 edt_input.setHint("");
                 edt_input.setEnabled(false);
             }
@@ -271,43 +282,49 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         btn_etc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                reason = 3;
+                reason = "기타";
                 btn_work.setBackgroundColor(Color.rgb(255, 255, 255));
                 btn_eat.setBackgroundColor(Color.rgb(255, 255, 255));
                 btn_etc.setBackgroundColor(Color.rgb(217, 217, 217));
+                btn_request.setEnabled(true);
                 edt_input.setEnabled(true);
                 edt_input.setHint("직접입력...");
             }
         });
 
+        // 외출신청
         btn_request.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*if (reason == 0) {
-                    Toast.makeText(getApplicationContext(), "외출사유를 선택하세요", Toast.LENGTH_SHORT).show();
-                    return;
-                }*/
-//                flag = "INSERT";
-//                dataget();
-                long now = System.currentTimeMillis();
-                Date date = new Date(now);
-                SimpleDateFormat sdfNow = new SimpleDateFormat("yyyy-MM-dd");
-                SimpleDateFormat sdfNow2 = new SimpleDateFormat("HH:mm:ss");
-                String strNow = sdfNow.format(date);
-                String strNow2 = sdfNow2.format(date);
+                stopflag = false;
+                thread = new Thread() {
+                    public void run() {
 
-                String identifier = GetDevicesUUID(MainActivity.this);
+                        while (!stopflag) {
+                            String identifier = GetDevicesUUID(MainActivity.this);
 
-                String startDay = start_year + "/" + start_month + "/" + start_day;
-                String startTime = start_hour + ":" + start_minute;
-                String endDay = end_year + "/" + end_month + "/" + end_day;
-                String endTime = end_hour + ":" + end_minute;
+                            long now = System.currentTimeMillis();
+                            Date date = new Date(now);
+                            SimpleDateFormat sdfNow = new SimpleDateFormat("yyyy-MM-dd");
+                            SimpleDateFormat sdfNow2 = new SimpleDateFormat("HH:mm:ss");
+                            String strNow = sdfNow.format(date);
+                            String strNow2 = sdfNow2.format(date);
+                            String startDay = start_year + "/" + start_month + "/" + start_day;
+                            String startTime = start_hour + ":" + start_minute;
+                            String endDay = end_year + "/" + end_month + "/" + end_day;
+                            String endTime = end_hour + ":" + end_minute;
 
-                insert("http://192.168.64.166:3000/request?identifier=" + identifier + "&" + "startday=" + startDay + "&" + "starttime=" + startTime + "&" + "endday=" + endDay + "&" + "endtime=" + endTime + "&" + "reason=" + reason + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
+                            try {
+                                reason = java.net.URLEncoder.encode(new String(reason.getBytes("UTF-8")));
+                            } catch (Exception e) {
+                                Log.d("ERROR reason encoder", "ERROR reason encoder");
+                            }
 
-//                Toast.makeText(getApplicationContext(), "시작: " + start_year + "/" + start_month + "/" + start_day + "/" + start_hour + "/" + start_minute, Toast.LENGTH_SHORT).show();
-//                Toast.makeText(getApplicationContext(), "종료: " + end_year + "/" + end_month + "/" + end_day + "/" + end_hour + "/" + end_minute, Toast.LENGTH_SHORT).show();
-//                Toast.makeText(getApplicationContext(), "사유: " + reason, Toast.LENGTH_SHORT).show();
+                            won_insert("http://192.168.64.166:3000/request?identifier=" + identifier + "&" + "startday=" + startDay + "&" + "starttime=" + startTime + "&" + "endday=" + endDay + "&" + "endtime=" + endTime + "&" + "reason=" + reason + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
+                        }
+                    }
+                };
+                thread.start();
             }
         });
 
@@ -326,10 +343,18 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             onAccessFineLocationPermissionGranted();
         }
 
-        onCustomClicked();
-        insert("http://192.168.64.166:3000/data");
-//        dataget();
-    } //end oncreate
+        patchEOFException(); // EOFException 에러
+
+        onCustomClicked(); // 지오펜스 실행
+
+        //신청목록 조회
+        new Thread() {
+            public void run() {
+                won_select("http://192.168.64.166:3000/data");
+            }
+        }.start();
+
+    } //onCreate 종료
 
     /***********************************************************************************************************************************/
 
@@ -500,7 +525,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             if (status.isSuccess()) {
 //                Toast.makeText(this, "Geofence " + geofence.getId() + " has been added", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Error when adding " + geofence.getId() + " : " + status.getStatusMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "add Error", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -508,9 +533,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     @Override
     public void geofenceRemoveStatus(String geofenceId, Status status) {
         if (status.isSuccess()) {
-            Toast.makeText(this, "Geofence " + geofenceId + " has been removed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "remove", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "Error when removing " + geofenceId + " : " + status.getStatusMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "remove Error", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -537,6 +562,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         Toast.makeText(this, "Please enable your gps", Toast.LENGTH_SHORT).show();
     }
 
+    // 디바이스 식별번호
     private String GetDevicesUUID(Context mContext) {
         final TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
         final String tmDevice, tmSerial, androidId;
@@ -548,215 +574,90 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         return deviceId;
     }
 
-    public void insert(String link) {
-        insertToDatabase(link);
+    private void patchEOFException() {
+        System.setProperty("http.keepAlive", "false");
     }
 
-    private void insertToDatabase(String link) {
-
-        class InsertData extends AsyncTask<String, Void, String> {
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-            }
-
-            @Override
-            protected String doInBackground(String... params) {
-                try {
-                    String link = (String) params[0];
-                    Log.d("TAGlink", link);
-                    URL url = new URL(link);
-                    URLConnection conn = url.openConnection();
-
-                    conn.setDoOutput(true);
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
-                    StringBuilder sb = new StringBuilder();
-                    String line = null;
-
-                    while ((line = reader.readLine()) != null) {
-                        sb.append(line);
-                        break;
+    public void won_insert(String link) {
+        StringBuilder sb = new StringBuilder();
+        try {
+            URL url = new URL(link);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            if (conn != null) {
+                conn.setConnectTimeout(20000);
+                conn.setReadTimeout(20000);
+                conn.setUseCaches(false);
+                if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    BufferedReader br = new BufferedReader(
+                            new InputStreamReader(conn.getInputStream()));
+                    while (true) {
+                        String line = br.readLine();
+                        if (line == null)
+                            break;
+                        sb.append(line + "\n");
                     }
-
-                    try {
-                        JSONArray jsonArray = new JSONArray(line);
-                        Log.d("TAG", "" + jsonArray.length());
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            set_startday.add(jsonObject.getString("startday"));
-                            set_starttime.add(jsonObject.getString("starttime"));
-                            set_endday.add(jsonObject.getString("endday"));
-                            set_endtime.add(jsonObject.getString("endtime"));
-
-                            set_reason.add(jsonObject.getString("reason"));
-                            adapter.addItem(set_startday.get(i) + " " + set_starttime.get(i), set_endday.get(i) + " " + set_endtime.get(i), set_reason.get(i));
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    Log.d("TAG", sb.toString());
-                    return sb.toString();
-
-                } catch (Exception e) {
-                    return new String("Exception: " + e.getMessage());
+                    br.close();
                 }
+                conn.disconnect();
             }
-        }
-
-        InsertData task = new InsertData();
-        task.execute(link);
-    }
-
-
-    /*class BackgroundTask extends AsyncTask<Integer, Integer, Integer> {
-        protected void onPreExecute() {
-            Log.d("TAG", "OK1");
-            if (flag == "SELECT") {
-                Log.d("TAG", "SELECT1");
-                address = "http://192.168.64.166:3000/data";
-            } else if (flag == "INSERT") {
-                Log.d("TAG", "INSERT1");
-                String identifier = GetDevicesUUID(MainActivity.this);
-                address = "http://192.168.64.166:3000/data_insert?identifier=" + identifier;
-            }
-        }
-
-        @Override
-        protected Integer doInBackground(Integer... arg0) {
-            Log.d("TAG", "OK2");
-            if (flag == "SELECT") {
-                Log.d("TAG", "SELECT2");
-                try {
-                    URL url = new URL(address);
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    if (conn != null) {
-                        conn.setConnectTimeout(10000);
-                        conn.setRequestMethod("GET");
-                        conn.setDoInput(true);
-                        conn.setDoOutput(true);
-                        int resCode = conn.getResponseCode();
-                        if (resCode == HttpURLConnection.HTTP_OK) {
-                            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                            String line = null;
-                            while (true) {
-                                line = reader.readLine();
-                                if (line == null) {
-                                    break;
-                                }
-                                try {
-                                    JSONArray jsonArray = new JSONArray(line);
-                                    Log.d("TAG", "" + jsonArray.length());
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                        title.add(jsonObject.getString("title"));
-                                        description.add(jsonObject.getString("description"));
-//                                        adapter.addItem(ContextCompat.getDrawable(MainActivity.this, R.drawable.default_notif),
-//                                                title.get(i), description.get(i));
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-
-                                task.cancel(true);
-
-                                if (this.isCancelled()) {
-                                    Log.d("TAG", "cancel1");
-                                    return null;
-                                }
-                            }
-                            reader.close();
-                            conn.disconnect();
-                        }
-                    }
-                } catch (Exception ex) {
-                    Log.e("SampleHTTP", "Exception in processing response.", ex);
-                    ex.printStackTrace();
-                }
-            } else if (flag == "INSERT") {
-                Log.d("TAG", "INSERT2");
-                try {
-                    URL url = new URL(address);
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    if (conn != null) {
-                        conn.setConnectTimeout(10000);
-                        conn.setRequestMethod("POST");
-                        conn.setDoInput(true);
-                        conn.setDoOutput(true);
-                        int resCode = conn.getResponseCode();
-                        if (resCode == HttpURLConnection.HTTP_OK) {
-                            Log.d("TAG", "OK");
-                        }
-                        conn.disconnect();
-                    }
-                } catch (Exception ex) {
-                    Log.e("SampleHTTP", "Exception in processing response.", ex);
-                    ex.printStackTrace();
-                }
-
-                task.cancel(true);
-
-                if (this.isCancelled()) {
-                    Log.d("TAG", "cancel2");
-                    return null;
-                }
-            }
-            return null;
+        } catch (Exception e) {
+            Log.d("ERROR", "ERROR");
+        } finally {
+            stopflag = true;
+            Log.d("flag=", "true");
+            reason = null;
         }
     }
 
-    public void dataget() {
-        task = new BackgroundTask();
-        task.execute();
-    }*/
-
-    /*********************************************************************************************************************************/
-
-    /*class BackgroundTask2 extends AsyncTask<Integer, Integer, Integer> {
-        protected void onPreExecute() {
-            String identifier = GetDevicesUUID(MainActivity.this);
-            address = "http://192.168.64.166:3000/data_insert?identifier=" + identifier;
+    public void won_select(String link) {
+        StringBuilder sb = new StringBuilder();
+        try {
+            URL url = new URL(link);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            if (conn != null) {
+                conn.setConnectTimeout(2000);
+                conn.setUseCaches(false);
+                if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+                    while (true) {
+                        String line = br.readLine();
+                        if (line == null)
+                            break;
+                        sb.append(line + "\n");
+                    }
+                    br.close();
+                }
+                conn.disconnect();
+            }
+        } catch (Exception e) {
+            Log.d("ERROR", "ERROR");
         }
 
-        @Override
-        protected Integer doInBackground(Integer... arg0) {
-            try {
-                URL url = new URL(address);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                if (conn != null) {
-                    conn.setConnectTimeout(10000);
-                    conn.setRequestMethod("POST");
-                    conn.setDoInput(true);
-                    conn.setDoOutput(true);
-                    int resCode = conn.getResponseCode();
-                    if (resCode == HttpURLConnection.HTTP_OK) {
-                        Log.d("TAG", "OK");
-                    }
-                    conn.disconnect();
-                }
-            } catch (Exception ex) {
-                Log.e("SampleHTTP", "Exception in processing response.", ex);
-                ex.printStackTrace();
-            }
+        String jsonString = sb.toString();
+        try {
+            ja = new JSONArray(jsonString);
+            for (int i = 0; i < ja.length(); i++) {
+                JSONObject jo = ja.getJSONObject(i);
+                String identifier[] = new String[100];
+                String startday[] = new String[100];
+                String starttime[] = new String[100];
+                String endday[] = new String[100];
+                String endtime[] = new String[100];
+                String reason[] = new String[100];
+                String allow[] = new String[100];
+                identifier[i] = jo.getString("identifier");
+                startday[i] = jo.getString("startday");
+                starttime[i] = jo.getString("starttime");
+                endday[i] = jo.getString("endday");
+                endtime[i] = jo.getString("endtime");
+                reason[i] = jo.getString("reason");
+                allow[i] = jo.getString("allow");
 
-            task2.cancel(true);
-
-            if (this.isCancelled()) {
-                Log.d("TAG", "cancel");
-                return null;
+                adapter.addItem(startday[i] + "  " + starttime[i], endday[i] + "  " + endtime[i], reason[i], allow[i]);
             }
-            return null;
+        } catch (JSONException e) {
+            Log.d("ERROR", "ERROR");
         }
     }
 
-    public void datapost() {
-        task2 = new BackgroundTask2();
-        task2.execute();
-    }*/
 }

@@ -9,6 +9,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
@@ -21,6 +22,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
@@ -41,7 +43,7 @@ public class CustomTransitionsIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         String notificationText = "Not a geo event";
-        String transitionStr=null;
+        String transitionStr = null;
         GeofencingEvent geoEvent = GeofencingEvent.fromIntent(intent);
         if (geoEvent != null) {
             if (geoEvent.hasError()) {
@@ -94,9 +96,13 @@ public class CustomTransitionsIntentService extends IntentService {
 
         Log.d("TAGid", identifier);
         Log.d("TAGonoff", transitionStr);
-        Log.d("TAGtime", ""+date);
+        Log.d("TAGtime", "" + date);
 
-        insert("http://192.168.64.166:3000/geofence?identifier="+identifier+"&"+"onoff="+transitionStr+"&"+"time="+strNow+"&"+"time2="+strNow2);
+        try {
+            won_insert("http://192.168.64.166:3000/geofence?identifier=" + identifier + "&" + "onoff=" + transitionStr + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         sendNotification(notificationText);
     }
 
@@ -128,60 +134,29 @@ public class CustomTransitionsIntentService extends IntentService {
         return deviceId;
     }
 
-    public void insert(String link) {
-        insertToDatabase(link);
-    }
-
-    private void insertToDatabase(String link) {
-
-        class InsertData extends AsyncTask<String, Void, String> {
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-            }
-
-            @Override
-            protected String doInBackground(String... params) {
-                try {
-                    String link = (String)params[0];
-                    Log.d("TAGlink", link);
-                    URL url = new URL(link);
-                    URLConnection conn = url.openConnection();
-
-                    conn.setDoOutput(true);
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
-                    StringBuilder sb = new StringBuilder();
-                    String line = null;
-
-                    /*while ((line = reader.readLine()) != null) {
-                        sb.append(line);
-                        break;
+    public void won_insert(String link) {
+        StringBuilder sb = new StringBuilder();
+        try {
+            URL url = new URL(link);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            if (conn != null) {
+                conn.setConnectTimeout(10000);
+                conn.setUseCaches(false);
+                if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    BufferedReader br = new BufferedReader(
+                            new InputStreamReader(conn.getInputStream()));
+                    while (true) {
+                        String line = br.readLine();
+                        if (line == null)
+                            break;
+                        sb.append(line + "\n");
                     }
-
-                    try {
-                        JSONArray jsonArray = new JSONArray(line);
-                        Log.d("TAG", "" + jsonArray.length());
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }*/
-
-                    Log.d("TAG", sb.toString());
-                    return sb.toString();
-
-                } catch (Exception e) {
-                    return new String("Exception: " + e.getMessage());
+                    br.close();
                 }
+                conn.disconnect();
             }
+        } catch (Exception e) {
+            Log.d("ERROR geofence", "ERROR geofence");
         }
-
-        InsertData task = new InsertData();
-        task.execute(link);
     }
 }

@@ -1,7 +1,9 @@
 package com.example.user.userapp;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +47,7 @@ public class ListViewAdapter extends BaseAdapter {
         TextView tv_start = (TextView) convertView.findViewById(R.id.tv_start) ;
         TextView descTextView = (TextView) convertView.findViewById(R.id.textView2) ;
         TextView tv_reason = (TextView) convertView.findViewById(R.id.tv_reason) ;
+        TextView tv_allow = (TextView) convertView.findViewById(R.id.tv_allow) ;
 
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
         ListViewItem listViewItem = listViewItemList.get(position);
@@ -54,6 +57,11 @@ public class ListViewAdapter extends BaseAdapter {
         tv_start.setText(listViewItem.getStart());
         descTextView.setText(listViewItem.getDesc());
         tv_reason.setText(listViewItem.getReason());
+        tv_allow.setText(listViewItem.getAllow());
+
+        if(listViewItem.getAllow().equals("대기")){
+            tv_allow.setTextColor(Color.rgb(250, 225, 0));
+        }
         return convertView;
     }
 
@@ -70,12 +78,13 @@ public class ListViewAdapter extends BaseAdapter {
     }
 
     // 아이템 데이터 추가를 위한 함수. 개발자가 원하는대로 작성 가능.
-    public void addItem(String _start, String desc, String _reason) {
+    public void addItem(String _start, String desc, String _reason, String _allow) {
         ListViewItem item = new ListViewItem();
 
         item.setStart(_start);
         item.setDesc(desc);
         item.setReason(_reason);
+        item.setAllow(_allow);
         listViewItemList.add(item);
     }
 }
