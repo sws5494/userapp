@@ -301,7 +301,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                     public void run() {
 
                         while (!stopflag) {
-                            String identifier = GetDevicesUUID(MainActivity.this);
+//                            String identifier = GetDevicesUUID(MainActivity.this);
+                            String phoneNumber = phoneNum(MainActivity.this);
 
                             long now = System.currentTimeMillis();
                             Date date = new Date(now);
@@ -320,7 +321,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                                 Log.d("ERROR reason encoder", "ERROR reason encoder");
                             }
 
-                            won_insert("http://192.168.64.166:3000/request?identifier=" + identifier + "&" + "startday=" + startDay + "&" + "starttime=" + startTime + "&" + "endday=" + endDay + "&" + "endtime=" + endTime + "&" + "reason=" + reason + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
+                            won_insert("http://192.168.64.166:3000/request?identifier=" + phoneNumber + "&" + "startday=" + startDay + "&" + "starttime=" + startTime + "&" + "endday=" + endDay + "&" + "endtime=" + endTime + "&" + "reason=" + reason + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
                         }
                     }
                 };
@@ -541,6 +542,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     @Override
     public void onLocationChanged(Location location) {
+//        Toast.makeText(getApplicationContext(), "Latitude="+location.getLatitude()+"\nLongitude="+location.getLongitude(), Toast.LENGTH_SHORT).show();
         Log.i(TAG, "Location changed : " + location);
         if (location != null) {
             mCurrentLocation = location;
@@ -572,6 +574,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         UUID deviceUuid = new UUID(androidId.hashCode(), ((long) tmDevice.hashCode() << 32) | tmSerial.hashCode());
         String deviceId = deviceUuid.toString();
         return deviceId;
+    }
+
+    private String phoneNum(Context context) {
+        TelephonyManager telManager = (TelephonyManager) context.getSystemService(context.TELEPHONY_SERVICE);
+        String phoneNum = telManager.getLine1Number();
+        return phoneNum;
     }
 
     private void patchEOFException() {

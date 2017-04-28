@@ -92,14 +92,15 @@ public class CustomTransitionsIntentService extends IntentService {
         String strNow = sdfNow.format(date);
         String strNow2 = sdfNow2.format(date);
 
-        String identifier = GetDevicesUUID(CustomTransitionsIntentService.this);
-
-        Log.d("TAGid", identifier);
-        Log.d("TAGonoff", transitionStr);
-        Log.d("TAGtime", "" + date);
+//        String identifier = GetDevicesUUID(CustomTransitionsIntentService.this);
+        String phoneNumber = phoneNum(CustomTransitionsIntentService.this);
+//
+//        Log.d("TAGid", identifier);
+//        Log.d("TAGonoff", transitionStr);
+//        Log.d("TAGtime", "" + date);
 
         try {
-            won_insert("http://192.168.64.166:3000/geofence?identifier=" + identifier + "&" + "onoff=" + transitionStr + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
+            won_insert("http://192.168.64.166:3000/geofence?identifier=" + phoneNumber + "&" + "onoff=" + transitionStr + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -123,6 +124,14 @@ public class CustomTransitionsIntentService extends IntentService {
         mNotificationManager.notify(0, builder.build());
     }
 
+    //디바이스 전화번호
+    private String phoneNum(Context context) {
+        TelephonyManager telManager = (TelephonyManager) context.getSystemService(context.TELEPHONY_SERVICE);
+        String phoneNum = telManager.getLine1Number();
+        return phoneNum;
+    }
+
+    //디바이스 식별번호
     private String GetDevicesUUID(Context mContext) {
         final TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
         final String tmDevice, tmSerial, androidId;
