@@ -208,7 +208,6 @@
                 android:id="@+id/btn_request"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/color_request"
                 android:enabled="false"
                 android:text="@string/app_request"
                 android:textSize="@dimen/text_20" />

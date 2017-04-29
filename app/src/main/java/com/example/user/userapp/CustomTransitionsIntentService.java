@@ -128,6 +128,7 @@ public class CustomTransitionsIntentService extends IntentService {
     private String phoneNum(Context context) {
         TelephonyManager telManager = (TelephonyManager) context.getSystemService(context.TELEPHONY_SERVICE);
         String phoneNum = telManager.getLine1Number();
+        phoneNum = phoneNum.replaceFirst("82", "0");
         return phoneNum;
     }
 

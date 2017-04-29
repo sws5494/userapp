@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -43,6 +45,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.EOFException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -57,6 +60,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
@@ -542,7 +546,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     @Override
     public void onLocationChanged(Location location) {
-//        Toast.makeText(getApplicationContext(), "Latitude="+location.getLatitude()+"\nLongitude="+location.getLongitude(), Toast.LENGTH_SHORT).show();
+        String phoneNumber = phoneNum(MainActivity.this);
+
+        try{
+            loc_update("http://192.168.64.166:3000/user_loc?phonenum=" + phoneNumber + "&lat=" + location.getLatitude()+"&lon="+location.getLongitude());
+        }catch(Exception e){
+            Log.d("changed error", "changed error");
+        }
         Log.i(TAG, "Location changed : " + location);
         if (location != null) {
             mCurrentLocation = location;
@@ -576,9 +586,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         return deviceId;
     }
 
+    // 전화번호
     private String phoneNum(Context context) {
         TelephonyManager telManager = (TelephonyManager) context.getSystemService(context.TELEPHONY_SERVICE);
         String phoneNum = telManager.getLine1Number();
+        phoneNum = phoneNum.replaceFirst("82", "0");
         return phoneNum;
     }
 
@@ -665,6 +677,34 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             }
         } catch (JSONException e) {
             Log.d("ERROR", "ERROR");
+        }
+    }
+
+    public void loc_update(String link) {
+        Log.d("UPDATE", "UPDATE");
+        StringBuilder sb = new StringBuilder();
+        try {
+            URL url = new URL(link);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            if (conn != null) {
+                conn.setConnectTimeout(10000);
+                conn.setUseCaches(false);
+                if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    BufferedReader br = new BufferedReader(
+                            new InputStreamReader(conn.getInputStream()));
+                    while (true) {
+                        String line = br.readLine();
+                        if (line == null)
+                            break;
+                        sb.append(line + "\n");
+                    }
+                    br.close();
+                }
+                conn.disconnect();
+            }
+        } catch (Exception e) {
+//                e.printStackTrace();
+            Log.d("ERROR geofence", "ERROR geofence");
         }
     }
 
