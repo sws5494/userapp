@@ -100,7 +100,9 @@ public class CustomTransitionsIntentService extends IntentService {
 //        Log.d("TAGtime", "" + date);
 
         try {
-            won_insert("http://192.168.64.166:3000/geofence?identifier=" + phoneNumber + "&" + "onoff=" + transitionStr + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
+//            won_insert("http://192.168.64.166:3000/geofence?identifier=" + phoneNumber + "&" + "onoff=" + transitionStr + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
+            won_insert("http://125.134.138.166:3000/geofence?identifier=" + phoneNumber + "&" + "onoff=" + transitionStr + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
+            won_insert("http://125.134.138.166:3000/user_state?phonenum=" + phoneNumber + "&state=" + transitionStr);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -166,7 +168,7 @@ public class CustomTransitionsIntentService extends IntentService {
                 conn.disconnect();
             }
         } catch (Exception e) {
-            Log.d("ERROR geofence", "ERROR geofence");
+            Log.d("ERROR state", "ERROR state");
         }
     }
 }

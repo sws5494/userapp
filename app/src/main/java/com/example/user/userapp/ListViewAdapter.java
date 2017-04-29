@@ -61,6 +61,10 @@ public class ListViewAdapter extends BaseAdapter {
 
         if(listViewItem.getAllow().equals("대기")){
             tv_allow.setTextColor(Color.rgb(250, 225, 0));
+        }else if(listViewItem.getAllow().equals("승인")){
+            tv_allow.setTextColor(Color.rgb(32, 114, 69));
+        }else if(listViewItem.getAllow().equals("거절")){
+            tv_allow.setTextColor(Color.rgb(210, 69, 37));
         }
         return convertView;
     }

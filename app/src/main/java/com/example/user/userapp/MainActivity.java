@@ -325,7 +325,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                                 Log.d("ERROR reason encoder", "ERROR reason encoder");
                             }
 
-                            won_insert("http://192.168.64.166:3000/request?identifier=" + phoneNumber + "&" + "startday=" + startDay + "&" + "starttime=" + startTime + "&" + "endday=" + endDay + "&" + "endtime=" + endTime + "&" + "reason=" + reason + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
+//                            won_insert("http://192.168.64.166:3000/request?identifier=" + phoneNumber + "&" + "startday=" + startDay + "&" + "starttime=" + startTime + "&" + "endday=" + endDay + "&" + "endtime=" + endTime + "&" + "reason=" + reason + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
+                            won_insert("http://125.134.138.166:3000/request?identifier=" + phoneNumber + "&" + "startday=" + startDay + "&" + "starttime=" + startTime + "&" + "endday=" + endDay + "&" + "endtime=" + endTime + "&" + "reason=" + reason + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
                         }
                     }
                 };
@@ -355,7 +356,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         //신청목록 조회
         new Thread() {
             public void run() {
-                won_select("http://192.168.64.166:3000/data");
+//                won_select("http://192.168.64.166:3000/data");
+                won_select("http://125.134.138.166:3000/data");
             }
         }.start();
 
@@ -547,9 +549,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     @Override
     public void onLocationChanged(Location location) {
         String phoneNumber = phoneNum(MainActivity.this);
-
+        Toast.makeText(getApplicationContext(), "change", Toast.LENGTH_SHORT).show();
         try{
-            loc_update("http://192.168.64.166:3000/user_loc?phonenum=" + phoneNumber + "&lat=" + location.getLatitude()+"&lon="+location.getLongitude());
+//            loc_update("http://192.168.64.166:3000/user_loc?phonenum=" + phoneNumber + "&lat=" + location.getLatitude()+"&lon="+location.getLongitude());
+            loc_update("http://125.134.138.166:3000/user_loc?phonenum=" + phoneNumber + "&lat=" + location.getLatitude()+"&lon="+location.getLongitude());
         }catch(Exception e){
             Log.d("changed error", "changed error");
         }
@@ -704,7 +707,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             }
         } catch (Exception e) {
 //                e.printStackTrace();
-            Log.d("ERROR geofence", "ERROR geofence");
+            Log.d("ERROR latlon", "ERROR latlon");
         }
     }
 
