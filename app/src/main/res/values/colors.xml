@@ -6,4 +6,8 @@
     <color name="color_view">#f9f9f9</color>
     <color name="color_request">#19fa00</color>
     <color name="color_gray">#bfbfbf</color>
+    <color name="color_navy">#015E7F</color>
+    <color name="color_black">#000000</color>
+    <color name="color_yellow">#FAE100</color>
+    <color name="color_brown">#3B1E1E</color>
 </resources>

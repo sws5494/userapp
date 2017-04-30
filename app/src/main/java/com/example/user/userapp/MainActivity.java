@@ -188,6 +188,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             public void onClick(View v) {
                 tab_request.setBackgroundColor(Color.rgb(222, 222, 222));
                 tab_list.setBackgroundColor(Color.rgb(255, 255, 255));
+                tab_request.setTextColor(Color.rgb(1, 94, 125));
+                tab_list.setTextColor(Color.rgb(0, 0, 0));
                 tab_req_lay.setVisibility(View.VISIBLE);
                 tab_list_lay.setVisibility(View.GONE);
             }
@@ -196,8 +198,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         tab_list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tab_list.setBackgroundColor(Color.rgb(222, 222, 222));
                 tab_request.setBackgroundColor(Color.rgb(255, 255, 255));
+                tab_list.setBackgroundColor(Color.rgb(222, 222, 222));
+                tab_request.setTextColor(Color.rgb(0, 0, 0));
+                tab_list.setTextColor(Color.rgb(1, 94, 125));
                 tab_req_lay.setVisibility(View.GONE);
                 tab_list_lay.setVisibility(View.VISIBLE);
             }
@@ -511,7 +515,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 //                mCurrentLocation.getLongitude(),
                 35.145124,
                 129.009541,
-                200,
+                3000,
                 Geofence.NEVER_EXPIRE,
                 300000, // 5 minutes
                 Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT | Geofence.GEOFENCE_TRANSITION_DWELL,
