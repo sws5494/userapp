@@ -4,27 +4,19 @@ import android.app.IntentService;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
 import com.sousoum.libgeofencehelper.StorableGeofence;
 import com.sousoum.libgeofencehelper.StorableGeofenceManager;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -57,9 +49,9 @@ public class CustomTransitionsIntentService extends IntentService {
                     case Geofence.GEOFENCE_TRANSITION_EXIT:
                         transitionStr = "Exit";
                         break;
-                    case Geofence.GEOFENCE_TRANSITION_DWELL:
+                    /*case Geofence.GEOFENCE_TRANSITION_DWELL:
                         transitionStr = "Dwell";
-                        break;
+                        break;*/
                     default:
                         transitionStr = "Unknown";
                 }
@@ -101,8 +93,8 @@ public class CustomTransitionsIntentService extends IntentService {
 
         try {
 //            won_insert("http://192.168.64.166:3000/geofence?identifier=" + phoneNumber + "&" + "onoff=" + transitionStr + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
-            won_insert("http://125.134.138.166:3000/geofence?identifier=" + phoneNumber + "&" + "onoff=" + transitionStr + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
-            won_insert("http://125.134.138.166:3000/user_state?phonenum=" + phoneNumber + "&state=" + transitionStr);
+            won_insert("http://192.168.64.166:3000/geofence?identifier=" + phoneNumber + "&" + "onoff=" + transitionStr + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
+            won_insert("http://192.168.64.166:3000/user_state?phonenum=" + phoneNumber + "&state=" + transitionStr);
         } catch (Exception e) {
             e.printStackTrace();
         }

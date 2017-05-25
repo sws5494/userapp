@@ -212,7 +212,6 @@
                 android:id="@+id/btn_request"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:enabled="false"
                 android:background="@color/color_yellow"
                 android:textColor="@color/color_brown"
                 android:textStyle="bold"

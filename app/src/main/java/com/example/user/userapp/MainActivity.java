@@ -2,23 +2,18 @@ package com.example.user.userapp;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
@@ -44,25 +39,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity implements LocationListener, StorableGeofenceManager.StorableGeofenceManagerListener {
     LinearLayout tab_req_lay, tab_list_lay;
@@ -80,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     int start_year, start_month, start_day, start_hour, start_minute;
     int end_year, end_month, end_day, end_hour, end_minute;
-    String reason = null;
+    String phoneNumber, reason = null;
 
     boolean Flag_day, Flag_time;
 
@@ -310,7 +295,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
                         while (!stopflag) {
 //                            String identifier = GetDevicesUUID(MainActivity.this);
-                            String phoneNumber = phoneNum(MainActivity.this);
 
                             long now = System.currentTimeMillis();
                             Date date = new Date(now);
@@ -330,7 +314,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                             }
 
 //                            won_insert("http://192.168.64.166:3000/request?identifier=" + phoneNumber + "&" + "startday=" + startDay + "&" + "starttime=" + startTime + "&" + "endday=" + endDay + "&" + "endtime=" + endTime + "&" + "reason=" + reason + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
-                            won_insert("http://125.134.138.166:3000/request?identifier=" + phoneNumber + "&" + "startday=" + startDay + "&" + "starttime=" + startTime + "&" + "endday=" + endDay + "&" + "endtime=" + endTime + "&" + "reason=" + reason + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
+                            won_insert("http://192.168.64.166:3000/request?identifier=" + phoneNumber + "&" + "startday=" + startDay + "&" + "starttime=" + startTime + "&" + "endday=" + endDay + "&" + "endtime=" + endTime + "&" + "reason=" + reason + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
                         }
                     }
                 };
@@ -357,17 +341,40 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
         onCustomClicked(); // 지오펜스 실행
 
+        phoneNumber = phoneNum(MainActivity.this);
+
         //신청목록 조회
         new Thread() {
             public void run() {
 //                won_select("http://192.168.64.166:3000/data");
-                won_select("http://125.134.138.166:3000/data");
+                won_select("http://192.168.64.166:3000/data");
+
+                if(checkGPS()){
+                    Log.d("PN", phoneNumber);
+                    loc_update("http://192.168.64.166:3000/user_gps?phonenum="+phoneNumber+"&gps=ON");
+                }else{
+                    loc_update("http://192.168.64.166:3000/user_gps?phonenum="+phoneNumber+"&gps=OFF");
+                }
             }
         }.start();
 
     } //onCreate 종료
 
+
     /***********************************************************************************************************************************/
+
+
+    public boolean checkGPS() {
+        LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
+        boolean isGPS = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (isGPS) {
+
+            return true;
+        } else {
+            Log.d("GPS", "CHECK");
+        }
+        return false;
+    }
 
     private DatePickerDialog.OnDateSetListener date_listener = new DatePickerDialog.OnDateSetListener() {
         @Override
@@ -552,11 +559,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     @Override
     public void onLocationChanged(Location location) {
-        String phoneNumber = phoneNum(MainActivity.this);
         Toast.makeText(getApplicationContext(), "change", Toast.LENGTH_SHORT).show();
         try{
 //            loc_update("http://192.168.64.166:3000/user_loc?phonenum=" + phoneNumber + "&lat=" + location.getLatitude()+"&lon="+location.getLongitude());
-            loc_update("http://125.134.138.166:3000/user_loc?phonenum=" + phoneNumber + "&lat=" + location.getLatitude()+"&lon="+location.getLongitude());
+            loc_update("http://192.168.64.166:3000/user_loc?phonenum=" + phoneNumber + "&lat=" + location.getLatitude()+"&lon="+location.getLongitude());
         }catch(Exception e){
             Log.d("changed error", "changed error");
         }
@@ -597,7 +603,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     private String phoneNum(Context context) {
         TelephonyManager telManager = (TelephonyManager) context.getSystemService(context.TELEPHONY_SERVICE);
         String phoneNum = telManager.getLine1Number();
-        phoneNum = phoneNum.replaceFirst("82", "0");
+        phoneNum = phoneNum.replaceFirst("\\+82", "0");
         return phoneNum;
     }
 
@@ -710,7 +716,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 conn.disconnect();
             }
         } catch (Exception e) {
-//                e.printStackTrace();
             Log.d("ERROR latlon", "ERROR latlon");
         }
     }
