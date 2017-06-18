@@ -17,9 +17,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/color_white_gray_gray"
-            android:textColor="@color/color_navy"
             android:gravity="center"
             android:text="@string/tab_request"
+            android:textColor="@color/color_navy"
             android:textStyle="bold" />
 
         <TextView
@@ -28,9 +28,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/color_white"
-            android:textColor="@color/color_black"
             android:gravity="center"
             android:text="@string/tab_list"
+            android:textColor="@color/color_black"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -67,7 +67,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_marginRight="5dp"
                     android:text="@string/app_start"
                     android:textSize="@dimen/text_20" />
 
@@ -76,7 +76,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
-                    android:layout_weight="3"
+                    android:layout_weight="1"
                     android:background="@color/color_white_gray"
                     android:gravity="center"
                     android:padding="5dp"
@@ -107,7 +107,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_marginRight="5dp"
                     android:text="@string/app_end"
                     android:textSize="@dimen/text_20" />
 
@@ -116,7 +116,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
-                    android:layout_weight="3"
+                    android:layout_weight="1"
                     android:background="@color/color_white_gray"
                     android:gravity="center"
                     android:padding="5dp"
@@ -212,11 +212,10 @@
                 android:id="@+id/btn_request"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/color_yellow"
-                android:textColor="@color/color_brown"
-                android:textStyle="bold"
+                android:enabled="false"
                 android:text="@string/app_request"
-                android:textSize="@dimen/text_20" />
+                android:textSize="@dimen/text_20"
+                android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
 
@@ -230,12 +229,18 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="5dp"
+            android:layout_height="3dp"
             android:background="@color/color_white_gray_gray" />
 
-        <ListView
-            android:id="@+id/listview1"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content">
+
+            <ListView
+                android:id="@+id/listview1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </android.support.v4.widget.SwipeRefreshLayout>
     </LinearLayout>
 </LinearLayout>

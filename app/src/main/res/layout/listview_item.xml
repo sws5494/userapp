@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linear_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_white_gray_gray"
@@ -31,7 +32,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="시작:  " />
+                    android:text="시작 |  " />
 
                 <TextView
                     android:id="@+id/tv_start"
@@ -51,7 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="종료:  " />
+                    android:text="종료 |  " />
 
                 <TextView
                     android:id="@+id/textView2"
@@ -71,7 +72,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="사유:  " />
+                    android:text="사유 |  " />
 
                 <TextView
                     android:id="@+id/tv_reason"
@@ -90,7 +91,7 @@
             android:background="@color/color_white_gray_gray"></View>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"

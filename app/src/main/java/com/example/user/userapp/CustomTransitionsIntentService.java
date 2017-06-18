@@ -21,7 +21,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by Djavan on 13/12/2014.
@@ -44,10 +43,10 @@ public class CustomTransitionsIntentService extends IntentService {
                 int transition = geoEvent.getGeofenceTransition();
                 switch (transition) {
                     case Geofence.GEOFENCE_TRANSITION_ENTER:
-                        transitionStr = "Enter";
+                        transitionStr = "IN";
                         break;
                     case Geofence.GEOFENCE_TRANSITION_EXIT:
-                        transitionStr = "Exit";
+                        transitionStr = "OUT";
                         break;
                     /*case Geofence.GEOFENCE_TRANSITION_DWELL:
                         transitionStr = "Dwell";
@@ -107,7 +106,7 @@ public class CustomTransitionsIntentService extends IntentService {
 
         // Set the notification contents
         builder.setSmallIcon(com.sousoum.libgeofencehelper.R.drawable.default_notif)
-                .setContentTitle("Custom")
+                .setContentTitle("알림")
                 .setContentText(text);
 
         // Get an instance of the Notification manager
@@ -122,12 +121,14 @@ public class CustomTransitionsIntentService extends IntentService {
     private String phoneNum(Context context) {
         TelephonyManager telManager = (TelephonyManager) context.getSystemService(context.TELEPHONY_SERVICE);
         String phoneNum = telManager.getLine1Number();
-        phoneNum = phoneNum.replaceFirst("82", "0");
+        if(phoneNum != null) {
+            phoneNum = phoneNum.replaceFirst("82", "0");
+        }
         return phoneNum;
     }
 
     //디바이스 식별번호
-    private String GetDevicesUUID(Context mContext) {
+    /*private String GetDevicesUUID(Context mContext) {
         final TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
         final String tmDevice, tmSerial, androidId;
         tmDevice = "" + tm.getDeviceId();
@@ -136,7 +137,7 @@ public class CustomTransitionsIntentService extends IntentService {
         UUID deviceUuid = new UUID(androidId.hashCode(), ((long) tmDevice.hashCode() << 32) | tmSerial.hashCode());
         String deviceId = deviceUuid.toString();
         return deviceId;
-    }
+    }*/
 
     public void won_insert(String link) {
         StringBuilder sb = new StringBuilder();
@@ -148,7 +149,7 @@ public class CustomTransitionsIntentService extends IntentService {
                 conn.setUseCaches(false);
                 if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
                     BufferedReader br = new BufferedReader(
-                            new InputStreamReader(conn.getInputStream()));
+                            new InputStreamReader(conn.getInputStream(), "UTF-8"));
                     while (true) {
                         String line = br.readLine();
                         if (line == null)
