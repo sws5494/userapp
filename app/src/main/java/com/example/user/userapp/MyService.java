@@ -97,8 +97,11 @@ public class MyService extends Service {
                         String myTime = CurTimeFormat.format(date);
 
 //                        myUpdate("http://192.168.64.166:3000/user_gps?phonenum=" + phonenum + "&gps=" + gps);
+                        myUpdate("http://112.185.119.215:3000/user_gps?phonenum=" + phonenum + "&gps=" + gps);
 //                        myUpdate("http://192.168.64.166:3000/user_install?phonenum=" + phonenum + "&myTime=" + myTime);
-                        select2("http://192.168.64.166:3000/data");
+                        myUpdate("http://112.185.119.215:3000/user_install?phonenum=" + phonenum + "&myTime=" + myTime);
+//                        select2("http://192.168.64.166:3000/data");
+                        select2("http://112.185.119.215:3000/data");
 //                        MainActivity.adapter.notifyDataSetChanged();
                     } catch (Exception e) {
                         Log.d("MyService", "gps changed error");
@@ -179,7 +182,8 @@ public class MyService extends Service {
                     Log.d("NOTIFY", jo.getString("identifier"));
                     new Thread() {
                         public void run() {
-                            myUpdate("http://192.168.64.166:3000/request_allow?&identifier=" + T_id + "&notify=" + "empty");
+//                            myUpdate("http://192.168.64.166:3000/request_allow?&identifier=" + T_id + "&notify=" + "empty");
+                            myUpdate("http://112.185.119.215:3000/request_allow?&identifier=" + T_id + "&notify=" + "empty");
                             myHaldler.post(new Runnable() {
                                 @Override
                                 public void run() {

@@ -339,8 +339,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 String T_start_time = tv_start_day.getText().toString();
                 String T_end_day = tv_start_day.getText().toString();
                 String T_end_time = tv_start_day.getText().toString();
-                if (start_year != 0 && start_month != 0 && start_day != 0 && start_hour != 0 && start_minute != 0) {
-                    if (end_year != 0 && end_month != 0 && end_day != 0 && end_hour != 0 && end_minute != 0) {
+//                if (start_year != 0 && start_month != 0 && start_day != 0 && start_hour != 0 && start_minute != 0) {
+//                    if (end_year != 0 && end_month != 0 && end_day != 0 && end_hour != 0 && end_minute != 0) {
                         if (reason != null) {
 
                             long now = System.currentTimeMillis();
@@ -360,11 +360,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                             int compare = day1.compareTo(day2);
                             int compare2 = day2.compareTo(day3);
                             if (compare > 0) {
+                                Log.d("TAG", "!!!!!!!!!!!!");
                                 toast3.setGravity(Gravity.CENTER, 0, 0);
                                 toast3.show();
                                 return;
                             } else {
                                 if (compare2 > 0) {
+                                    Log.d("TAG", "@@@@@@@@@@@");
                                     toast3.setGravity(Gravity.CENTER, 0, 0);
                                     toast3.show();
                                     return;
@@ -425,7 +427,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                                                 }
 
 //                            won_insert("http://192.168.64.166:3000/request?identifier=" + phoneNumber + "&" + "startday=" + startDay + "&" + "starttime=" + startTime + "&" + "endday=" + endDay + "&" + "endtime=" + endTime + "&" + "reason=" + reason + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
-                                                won_insert("http://192.168.64.166:3000/request?identifier=" + phoneNumber + "&" + "startday=" + startDay + "&" + "starttime=" + startTime + "&" + "endday=" + endDay + "&" + "endtime=" + endTime + "&" + "reason=" + reason + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
+//                                                won_insert("http://192.168.64.166:3000/request?identifier=" + phoneNumber + "&" + "startday=" + startDay + "&" + "starttime=" + startTime + "&" + "endday=" + endDay + "&" + "endtime=" + endTime + "&" + "reason=" + reason + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
+                                                won_insert("http://112.185.119.215:3000/request?identifier=" + phoneNumber + "&" + "startday=" + startDay + "&" + "starttime=" + startTime + "&" + "endday=" + endDay + "&" + "endtime=" + endTime + "&" + "reason=" + reason + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
 
                                                 final SimpleDateFormat CurDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");
                                                 SimpleDateFormat CurTimeFormat = new SimpleDateFormat("HH시 mm분");
@@ -464,14 +467,16 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                             toast2.setGravity(Gravity.CENTER, 0, 0);
                             toast2.show();
                         }
-                    } else {
+                    /*} else {
+                        Log.d("TAG", "############");
                         toast3.setGravity(Gravity.CENTER, 0, 0);
                         toast3.show();
                     }
                 } else {
+                    Log.d("TAG", "$$$$$$$$$$");
                     toast3.setGravity(Gravity.CENTER, 0, 0);
                     toast3.show();
-                }
+                }*/
             }
         });
 
@@ -500,7 +505,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         new Thread() {
             public void run() {
 //                won_select("http://192.168.64.166:3000/data");
-                won_select("http://192.168.64.166:3000/data");
+                won_select("http://112.185.119.215:3000/data");
 
                 /*if (checkGPS()) {
                     Log.d("PN", "" + phoneNumber);
@@ -523,7 +528,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     public void onRefresh() {
         new Thread() {
             public void run() {
-                won_select("http://192.168.64.166:3000/data");
+//                won_select("http://192.168.64.166:3000/data");
+                won_select("http://112.185.119.215:3000/data");
                 myHandler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -731,8 +737,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     public void onLocationChanged(Location location) {
         Toast.makeText(getApplicationContext(), "change", Toast.LENGTH_SHORT).show();
         try {
-//            loc_update("http://192.168.64.166:3000/user_loc?phonenum=" + phoneNumber + "&lat=" + location.getLatitude()+"&lon="+location.getLongitude());
-            loc_update("http://192.168.64.166:3000/user_loc?phonenum=" + phoneNumber + "&lat=" + location.getLatitude() + "&lon=" + location.getLongitude());
+//            loc_update("http://192.168.64.166:3000/user_loc?phonenum=" + phoneNumber + "&lat=" + location.getLatitude() + "&lon=" + location.getLongitude());
+            loc_update("http://112.185.119.215:3000/user_loc?phonenum=" + phoneNumber + "&lat=" + location.getLatitude() + "&lon=" + location.getLongitude());
         } catch (Exception e) {
             Log.d("changed error", "changed error");
         }

@@ -92,8 +92,9 @@ public class CustomTransitionsIntentService extends IntentService {
 
         try {
 //            won_insert("http://192.168.64.166:3000/geofence?identifier=" + phoneNumber + "&" + "onoff=" + transitionStr + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
-            won_insert("http://192.168.64.166:3000/geofence?identifier=" + phoneNumber + "&" + "onoff=" + transitionStr + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
-            won_insert("http://192.168.64.166:3000/user_state?phonenum=" + phoneNumber + "&state=" + transitionStr);
+            won_insert("http://112.185.119.215:3000/geofence?identifier=" + phoneNumber + "&" + "onoff=" + transitionStr + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
+//            won_insert("http://192.168.64.166:3000/user_state?phonenum=" + phoneNumber + "&state=" + transitionStr);
+            won_insert("http://112.185.119.215:3000/user_state?phonenum=" + phoneNumber + "&state=" + transitionStr);
         } catch (Exception e) {
             e.printStackTrace();
         }
