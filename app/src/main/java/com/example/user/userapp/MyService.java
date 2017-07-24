@@ -13,6 +13,9 @@ import android.support.v4.app.NotificationCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import com.google.android.gms.location.Geofence;
+import com.sousoum.libgeofencehelper.StorableGeofence;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -84,6 +87,25 @@ public class MyService extends Service {
 
             Notifi_M.notify( 777 , Notifi);*/
 
+            String geoId;
+            String receiverClassName;
+            Thread geo = new Thread(){
+                public void run(){
+                    StorableGeofence storableGeofence = new StorableGeofence(
+                            geoId,
+                            receiverClassName,
+//                mCurrentLocation.getLatitude(),
+//                mCurrentLocation.getLongitude(),
+                            35.145089,
+                            129.008778,
+                            300,
+                            Geofence.NEVER_EXPIRE,
+                            30000000, // 5 minutes
+                            Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT | Geofence.GEOFENCE_TRANSITION_DWELL,
+                            additionalData);
+                }
+            };
+            geo.start();
 
             Thread thread = new Thread() {
                 public void run() {
