@@ -13,9 +13,6 @@ import android.support.v4.app.NotificationCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import com.google.android.gms.location.Geofence;
-import com.sousoum.libgeofencehelper.StorableGeofence;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -87,26 +84,6 @@ public class MyService extends Service {
 
             Notifi_M.notify( 777 , Notifi);*/
 
-            String geoId;
-            String receiverClassName;
-            Thread geo = new Thread(){
-                public void run(){
-                    StorableGeofence storableGeofence = new StorableGeofence(
-                            geoId,
-                            receiverClassName,
-//                mCurrentLocation.getLatitude(),
-//                mCurrentLocation.getLongitude(),
-                            35.145089,
-                            129.008778,
-                            300,
-                            Geofence.NEVER_EXPIRE,
-                            30000000, // 5 minutes
-                            Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT | Geofence.GEOFENCE_TRANSITION_DWELL,
-                            additionalData);
-                }
-            };
-            geo.start();
-
             Thread thread = new Thread() {
                 public void run() {
                     try {
@@ -118,12 +95,12 @@ public class MyService extends Service {
                         SimpleDateFormat CurTimeFormat = new SimpleDateFormat("dd-HH-mm-ss");
                         String myTime = CurTimeFormat.format(date);
 
-//                        myUpdate("http://192.168.64.166:3000/user_gps?phonenum=" + phonenum + "&gps=" + gps);
-                        myUpdate("http://112.185.119.215:3000/user_gps?phonenum=" + phonenum + "&gps=" + gps);
-//                        myUpdate("http://192.168.64.166:3000/user_install?phonenum=" + phonenum + "&myTime=" + myTime);
-                        myUpdate("http://112.185.119.215:3000/user_install?phonenum=" + phonenum + "&myTime=" + myTime);
-//                        select2("http://192.168.64.166:3000/data");
-                        select2("http://112.185.119.215:3000/data");
+                        myUpdate("http://192.168.64.166:3000/user_gps?phonenum=" + phonenum + "&gps=" + gps);
+//                        myUpdate("http://112.185.119.215:3000/user_gps?phonenum=" + phonenum + "&gps=" + gps);
+                        myUpdate("http://192.168.64.166:3000/user_install?phonenum=" + phonenum + "&myTime=" + myTime);
+//                        myUpdate("http://112.185.119.215:3000/user_install?phonenum=" + phonenum + "&myTime=" + myTime);
+                        select2("http://192.168.64.166:3000/data");
+//                        select2("http://112.185.119.215:3000/data");
 //                        MainActivity.adapter.notifyDataSetChanged();
                     } catch (Exception e) {
                         Log.d("MyService", "gps changed error");
@@ -145,7 +122,7 @@ public class MyService extends Service {
         builder.setSmallIcon(com.sousoum.libgeofencehelper.R.drawable.default_notif)
                 .setContentTitle("알림")
                 .setTicker("외출내역을 확인하세요")
-                .setVibrate(new long[]{0, 1000})
+                .setVibrate(new long[]{0, 500})
                 .setContentText(text);
 
         // Get an instance of the Notification manager
@@ -204,8 +181,8 @@ public class MyService extends Service {
                     Log.d("NOTIFY", jo.getString("identifier"));
                     new Thread() {
                         public void run() {
-//                            myUpdate("http://192.168.64.166:3000/request_allow?&identifier=" + T_id + "&notify=" + "empty");
-                            myUpdate("http://112.185.119.215:3000/request_allow?&identifier=" + T_id + "&notify=" + "empty");
+                            myUpdate("http://192.168.64.166:3000/request_allow?&identifier=" + T_id + "&notify=" + "empty");
+//                            myUpdate("http://112.185.119.215:3000/request_allow?&identifier=" + T_id + "&notify=" + "empty");
                             myHaldler.post(new Runnable() {
                                 @Override
                                 public void run() {

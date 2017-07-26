@@ -341,132 +341,132 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 String T_end_time = tv_start_day.getText().toString();
 //                if (start_year != 0 && start_month != 0 && start_day != 0 && start_hour != 0 && start_minute != 0) {
 //                    if (end_year != 0 && end_month != 0 && end_day != 0 && end_hour != 0 && end_minute != 0) {
-                        if (reason != null) {
+                if (reason != null) {
 
-                            long now = System.currentTimeMillis();
-                            Date date = new Date(now);
-                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
-                            String nowDate = format.format(date);
-                            Date day1 = null;
-                            Date day2 = null;
-                            Date day3 = null;
-                            try {
-                                day1 = format.parse(nowDate);
-                                day2 = format.parse(start_year + "-" + start_month + "-" + start_day + "-" + start_hour + "-" + start_minute);
-                                day3 = format.parse(end_year + "-" + end_month + "-" + end_day + "-" + end_hour + "-" + end_minute);
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                            int compare = day1.compareTo(day2);
-                            int compare2 = day2.compareTo(day3);
-                            if (compare > 0) {
-                                Log.d("TAG", "!!!!!!!!!!!!");
-                                toast3.setGravity(Gravity.CENTER, 0, 0);
-                                toast3.show();
-                                return;
-                            } else {
-                                if (compare2 > 0) {
-                                    Log.d("TAG", "@@@@@@@@@@@");
-                                    toast3.setGravity(Gravity.CENTER, 0, 0);
-                                    toast3.show();
-                                    return;
-                                } else {
+                    long now = System.currentTimeMillis();
+                    Date date = new Date(now);
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
+                    String nowDate = format.format(date);
+                    Date day1 = null;
+                    Date day2 = null;
+                    Date day3 = null;
+                    try {
+                        day1 = format.parse(nowDate);
+                        day2 = format.parse(start_year + "-" + start_month + "-" + start_day + "-" + start_hour + "-" + start_minute);
+                        day3 = format.parse(end_year + "-" + end_month + "-" + end_day + "-" + end_hour + "-" + end_minute);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    int compare = day1.compareTo(day2);
+                    int compare2 = day2.compareTo(day3);
+                    if (compare > 0) {
+                        Log.d("TAG", "!!!!!!!!!!!!");
+                        toast3.setGravity(Gravity.CENTER, 0, 0);
+                        toast3.show();
+                        return;
+                    } else {
+                        if (compare2 > 0) {
+                            Log.d("TAG", "@@@@@@@@@@@");
+                            toast3.setGravity(Gravity.CENTER, 0, 0);
+                            toast3.show();
+                            return;
+                        } else {
 //                            Log.d("length=", "" + ja.length());
-                                    for (int i = 0; i < ja.length(); i++) {
+                            for (int i = 0; i < ja.length(); i++) {
 //                                Log.d("identifier=", "" + identifier2[i]);
 //                                Log.d("phone=", myPhone);
-                                        if (identifier2[i].equals(myPhone) && allow2[i].equals("대기")) {
-                                            toast.setGravity(Gravity.CENTER, 0, 0);
-                                            toast.show();
-                                            return;
-                                        } else if (identifier2[i].equals(myPhone) && allow2[i].equals("승인")) {
-                                            toast.setGravity(Gravity.CENTER, 0, 0);
-                                            toast.show();
-                                            return;
-                                        }
-                                    }
-                                    btn_request.setEnabled(false);
-                                    edt_input.setEnabled(false);
-                                    stopflag = false;
-                                    btn_request.setBackgroundColor(Color.rgb(230, 230, 230));
-                                    btn_request.setTextColor(Color.rgb(165, 165, 165));
-
-                                    btn_eat.setBackgroundColor(Color.rgb(242, 242, 242));
-                                    btn_work.setBackgroundColor(Color.rgb(242, 242, 242));
-                                    btn_etc.setBackgroundColor(Color.rgb(242, 242, 242));
-
-                                    SimpleDateFormat sdfNow = new SimpleDateFormat("yyyy년 MM월 dd일");
-                                    SimpleDateFormat sdfNow2 = new SimpleDateFormat("HH시 mm분");
-                                    String strNow = sdfNow.format(date);
-                                    String strNow2 = sdfNow2.format(date);
-
-                                    tv_start_day.setText(strNow);
-                                    tv_start_time.setText(strNow2);
-                                    tv_end_day.setText("...");
-                                    tv_end_time.setText("...");
-
-                                    thread = new Thread() {
-                                        public void run() {
-                                            while (!stopflag) {
-                                                long now = System.currentTimeMillis();
-                                                Date date = new Date(now);
-                                                SimpleDateFormat sdfNow = new SimpleDateFormat("yyyy-MM-dd");
-                                                SimpleDateFormat sdfNow2 = new SimpleDateFormat("HH:mm:ss");
-                                                String strNow = sdfNow.format(date);
-                                                String strNow2 = sdfNow2.format(date);
-
-                                                String startDay = start_year + "/" + start_month + "/" + start_day;
-                                                String startTime = start_hour + ":" + start_minute;
-                                                String endDay = end_year + "/" + end_month + "/" + end_day;
-                                                String endTime = end_hour + ":" + end_minute;
-
-                                                try {
-                                                    reason = java.net.URLEncoder.encode(new String(reason.getBytes("UTF-8")));
-                                                } catch (Exception e) {
-                                                    Log.d("ERROR reason encoder", "ERROR reason encoder");
-                                                }
-
-//                            won_insert("http://192.168.64.166:3000/request?identifier=" + phoneNumber + "&" + "startday=" + startDay + "&" + "starttime=" + startTime + "&" + "endday=" + endDay + "&" + "endtime=" + endTime + "&" + "reason=" + reason + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
-//                                                won_insert("http://192.168.64.166:3000/request?identifier=" + phoneNumber + "&" + "startday=" + startDay + "&" + "starttime=" + startTime + "&" + "endday=" + endDay + "&" + "endtime=" + endTime + "&" + "reason=" + reason + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
-                                                won_insert("http://112.185.119.215:3000/request?identifier=" + phoneNumber + "&" + "startday=" + startDay + "&" + "starttime=" + startTime + "&" + "endday=" + endDay + "&" + "endtime=" + endTime + "&" + "reason=" + reason + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
-
-                                                final SimpleDateFormat CurDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");
-                                                SimpleDateFormat CurTimeFormat = new SimpleDateFormat("HH시 mm분");
-                                                SimpleDateFormat CurYearFormat = new SimpleDateFormat("yyyy");
-                                                SimpleDateFormat CurMonthFormat = new SimpleDateFormat("MM");
-                                                SimpleDateFormat CurDayFormat = new SimpleDateFormat("dd");
-                                                SimpleDateFormat CurHourFormat = new SimpleDateFormat("HH");
-                                                SimpleDateFormat CurMinuteFormat = new SimpleDateFormat("mm");
-
-                                                int strCurYear = Integer.parseInt(CurYearFormat.format(date));
-                                                int strCurMonth = Integer.parseInt(CurMonthFormat.format(date));
-                                                int strCurDay = Integer.parseInt(CurDayFormat.format(date));
-                                                int strCurHour = Integer.parseInt(CurHourFormat.format(date));
-                                                int strCurMinute = Integer.parseInt(CurMinuteFormat.format(date));
-
-                                                start_year = strCurYear;
-                                                start_month = strCurMonth;
-                                                start_day = strCurDay;
-                                                start_hour = strCurHour;
-                                                start_minute = strCurMinute;
-
-                                                end_year = 0;
-                                                end_month = 0;
-                                                end_day = 0;
-                                                end_hour = 0;
-                                                end_minute = 0;
-
-                                                reason = null;
-                                            }
-                                        }
-                                    };
-                                    thread.start();
+                                if (identifier2[i].equals(myPhone) && allow2[i].equals("대기")) {
+                                    toast.setGravity(Gravity.CENTER, 0, 0);
+                                    toast.show();
+                                    return;
+                                } else if (identifier2[i].equals(myPhone) && allow2[i].equals("승인")) {
+                                    toast.setGravity(Gravity.CENTER, 0, 0);
+                                    toast.show();
+                                    return;
                                 }
                             }
-                        } else {
-                            toast2.setGravity(Gravity.CENTER, 0, 0);
-                            toast2.show();
+                            btn_request.setEnabled(false);
+                            edt_input.setEnabled(false);
+                            stopflag = false;
+                            btn_request.setBackgroundColor(Color.rgb(230, 230, 230));
+                            btn_request.setTextColor(Color.rgb(165, 165, 165));
+
+                            btn_eat.setBackgroundColor(Color.rgb(242, 242, 242));
+                            btn_work.setBackgroundColor(Color.rgb(242, 242, 242));
+                            btn_etc.setBackgroundColor(Color.rgb(242, 242, 242));
+
+                            SimpleDateFormat sdfNow = new SimpleDateFormat("yyyy년 MM월 dd일");
+                            SimpleDateFormat sdfNow2 = new SimpleDateFormat("HH시 mm분");
+                            String strNow = sdfNow.format(date);
+                            String strNow2 = sdfNow2.format(date);
+
+                            tv_start_day.setText(strNow);
+                            tv_start_time.setText(strNow2);
+                            tv_end_day.setText("...");
+                            tv_end_time.setText("...");
+
+                            thread = new Thread() {
+                                public void run() {
+                                    while (!stopflag) {
+                                        long now = System.currentTimeMillis();
+                                        Date date = new Date(now);
+                                        SimpleDateFormat sdfNow = new SimpleDateFormat("yyyy-MM-dd");
+                                        SimpleDateFormat sdfNow2 = new SimpleDateFormat("HH:mm:ss");
+                                        String strNow = sdfNow.format(date);
+                                        String strNow2 = sdfNow2.format(date);
+
+                                        String startDay = start_year + "/" + start_month + "/" + start_day;
+                                        String startTime = start_hour + ":" + start_minute;
+                                        String endDay = end_year + "/" + end_month + "/" + end_day;
+                                        String endTime = end_hour + ":" + end_minute;
+
+                                        try {
+                                            reason = java.net.URLEncoder.encode(new String(reason.getBytes("UTF-8")));
+                                        } catch (Exception e) {
+                                            Log.d("ERROR reason encoder", "ERROR reason encoder");
+                                        }
+
+//                            won_insert("http://192.168.64.166:3000/request?identifier=" + phoneNumber + "&" + "startday=" + startDay + "&" + "starttime=" + startTime + "&" + "endday=" + endDay + "&" + "endtime=" + endTime + "&" + "reason=" + reason + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
+                                        won_insert("http://192.168.64.166:3000/request?identifier=" + phoneNumber + "&" + "startday=" + startDay + "&" + "starttime=" + startTime + "&" + "endday=" + endDay + "&" + "endtime=" + endTime + "&" + "reason=" + reason + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
+//                                                won_insert("http://112.185.119.215:3000/request?identifier=" + phoneNumber + "&" + "startday=" + startDay + "&" + "starttime=" + startTime + "&" + "endday=" + endDay + "&" + "endtime=" + endTime + "&" + "reason=" + reason + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
+
+                                        final SimpleDateFormat CurDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");
+                                        SimpleDateFormat CurTimeFormat = new SimpleDateFormat("HH시 mm분");
+                                        SimpleDateFormat CurYearFormat = new SimpleDateFormat("yyyy");
+                                        SimpleDateFormat CurMonthFormat = new SimpleDateFormat("MM");
+                                        SimpleDateFormat CurDayFormat = new SimpleDateFormat("dd");
+                                        SimpleDateFormat CurHourFormat = new SimpleDateFormat("HH");
+                                        SimpleDateFormat CurMinuteFormat = new SimpleDateFormat("mm");
+
+                                        int strCurYear = Integer.parseInt(CurYearFormat.format(date));
+                                        int strCurMonth = Integer.parseInt(CurMonthFormat.format(date));
+                                        int strCurDay = Integer.parseInt(CurDayFormat.format(date));
+                                        int strCurHour = Integer.parseInt(CurHourFormat.format(date));
+                                        int strCurMinute = Integer.parseInt(CurMinuteFormat.format(date));
+
+                                        start_year = strCurYear;
+                                        start_month = strCurMonth;
+                                        start_day = strCurDay;
+                                        start_hour = strCurHour;
+                                        start_minute = strCurMinute;
+
+                                        end_year = 0;
+                                        end_month = 0;
+                                        end_day = 0;
+                                        end_hour = 0;
+                                        end_minute = 0;
+
+                                        reason = null;
+                                    }
+                                }
+                            };
+                            thread.start();
                         }
+                    }
+                } else {
+                    toast2.setGravity(Gravity.CENTER, 0, 0);
+                    toast2.show();
+                }
                     /*} else {
                         Log.d("TAG", "############");
                         toast3.setGravity(Gravity.CENTER, 0, 0);
@@ -497,15 +497,16 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
         patchEOFException(); // EOFException 에러
 
-        onCustomClicked(); // 지오펜스 실행
+//        onCustomClicked(); // 지오펜스 실행
 
         phoneNumber = phoneNum(MainActivity.this);
 
         //신청목록 조회
         new Thread() {
             public void run() {
-//                won_select("http://192.168.64.166:3000/data");
-                won_select("http://112.185.119.215:3000/data");
+                won_select("http://192.168.64.166:3000/data");
+                geo_select("http://192.168.64.166:3000/setGeoData");
+//                won_select("http://112.185.119.215:3000/data");
 
                 /*if (checkGPS()) {
                     Log.d("PN", "" + phoneNumber);
@@ -528,8 +529,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     public void onRefresh() {
         new Thread() {
             public void run() {
-//                won_select("http://192.168.64.166:3000/data");
-                won_select("http://112.185.119.215:3000/data");
+                won_select("http://192.168.64.166:3000/data");
+//                won_select("http://112.185.119.215:3000/data");
                 myHandler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -662,11 +663,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         }
     }
 
-    public void onCustomClicked() {
+    public void onCustomClicked(double lat, double lon, int radius) {
         HashMap<String, Object> additionalData = new HashMap<>();
         additionalData.put(ADDITIONAL_DATA_TIME, new Date().getTime()); // add a long
         additionalData.put(ADDITIONAL_DATA_PACKAGE, getApplicationContext().getPackageName()); // add a String
-        addGeofence(false, additionalData);
+        addGeofence(false, additionalData, lat, lon, radius);
     }
 
     /*public void onDefaultClicked(View view) {
@@ -680,7 +681,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         }
     }
 
-    private void addGeofence(boolean defaultReceiver, HashMap<String, Object> additionalData) {
+    private void addGeofence(boolean defaultReceiver, HashMap<String, Object> additionalData, double lat, double lon, int radius) {
+        Log.d("GEO ADD", "GEO ADD");
         String geoId;
         String receiverClassName;
         if (defaultReceiver) {
@@ -696,9 +698,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 receiverClassName,
 //                mCurrentLocation.getLatitude(),
 //                mCurrentLocation.getLongitude(),
-                35.145089,
-                129.008778,
-                300,
+                lat,
+                lon,
+                radius,
                 Geofence.NEVER_EXPIRE,
                 30000000, // 5 minutes
                 Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT | Geofence.GEOFENCE_TRANSITION_DWELL,
@@ -737,8 +739,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     public void onLocationChanged(Location location) {
         Toast.makeText(getApplicationContext(), "change", Toast.LENGTH_SHORT).show();
         try {
-//            loc_update("http://192.168.64.166:3000/user_loc?phonenum=" + phoneNumber + "&lat=" + location.getLatitude() + "&lon=" + location.getLongitude());
-            loc_update("http://112.185.119.215:3000/user_loc?phonenum=" + phoneNumber + "&lat=" + location.getLatitude() + "&lon=" + location.getLongitude());
+            loc_update("http://192.168.64.166:3000/user_loc?phonenum=" + phoneNumber + "&lat=" + location.getLatitude() + "&lon=" + location.getLongitude());
+//            loc_update("http://112.185.119.215:3000/user_loc?phonenum=" + phoneNumber + "&lat=" + location.getLatitude() + "&lon=" + location.getLongitude());
         } catch (Exception e) {
             Log.d("changed error", "changed error");
         }
@@ -911,6 +913,59 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             }
         } catch (Exception e) {
             Log.d("ERROR latlon", "ERROR latlon");
+        }
+    }
+
+    public void geo_select(String link) {
+        Log.d("select", "select");
+        StringBuilder sb = new StringBuilder();
+        try {
+            URL url = new URL(link);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            if (conn != null) {
+                conn.setConnectTimeout(10000);
+                conn.setUseCaches(false);
+                if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    BufferedReader br = new BufferedReader(
+                            new InputStreamReader(conn.getInputStream()));
+                    while (true) {
+                        String line = br.readLine();
+                        if (line == null)
+                            break;
+                        sb.append(line + "\n");
+                    }
+                    br.close();
+                }
+                conn.disconnect();
+            }
+        } catch (Exception e) {
+            Log.d("ERROR geo select", "ERROR geo select");
+        }
+
+        String jsonString = sb.toString();
+        try {
+            ja = new JSONArray(jsonString);
+            String lat[] = new String[100];
+            String lon[] = new String[100];
+            String radius[] = new String[100];
+            double _lat, _lon = 0;
+            int _radius = 0;
+            for (int i = 0; i < ja.length(); i++) {
+                JSONObject jo = ja.getJSONObject(i);
+                lat[i] = jo.getString("lat");
+                lon[i] = jo.getString("lon");
+                radius[i] = jo.getString("radius");
+                _lat = Double.parseDouble(lat[i]);
+                _lon = Double.parseDouble(lon[i]);
+                _radius = Integer.parseInt(radius[i]);
+                onCustomClicked(_lat, _lon, _radius);
+                Log.d("TAG", lat[i]);
+                Log.d("TAG", lon[i]);
+                Log.d("TAG", radius[i]);
+            }
+
+        } catch (JSONException e) {
+            Log.d("ERROR", "ERROR");
         }
     }
 
