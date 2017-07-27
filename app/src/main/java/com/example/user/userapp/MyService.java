@@ -122,7 +122,7 @@ public class MyService extends Service {
         builder.setSmallIcon(com.sousoum.libgeofencehelper.R.drawable.default_notif)
                 .setContentTitle("알림")
                 .setTicker("외출내역을 확인하세요")
-                .setVibrate(new long[]{0, 500})
+                .setVibrate(new long[]{0, 100})
                 .setContentText(text);
 
         // Get an instance of the Notification manager

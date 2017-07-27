@@ -3,7 +3,7 @@
     android:id="@+id/linear_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_white_gray_gray"
+    android:background="@color/color_white_gray"
     android:orientation="horizontal">
 
     <LinearLayout
@@ -20,8 +20,8 @@
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="20dp"
             android:layout_weight="1"
-            android:paddingTop="10dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingTop="10dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -59,6 +59,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:textColor="@color/color_red"
                     android:textSize="20dp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -79,8 +80,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textSize="20dp"
-                    android:textStyle="bold" />
+                    android:textSize="20dp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -91,10 +91,9 @@
             android:background="@color/color_white_gray_gray"></View>
 
         <LinearLayout
-            android:layout_width="80dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView

@@ -10,4 +10,5 @@
     <color name="color_black">#000000</color>
     <color name="color_yellow">#FAE100</color>
     <color name="color_brown">#3B1E1E</color>
+    <color name="color_red">#da694f</color>
 </resources>

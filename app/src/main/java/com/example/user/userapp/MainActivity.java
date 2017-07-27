@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         tab_request.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tab_request.setBackgroundColor(Color.rgb(222, 222, 222));
+                tab_request.setBackgroundColor(Color.rgb(242, 242, 242));
                 tab_list.setBackgroundColor(Color.rgb(255, 255, 255));
                 tab_request.setTextColor(Color.rgb(1, 94, 125));
                 tab_list.setTextColor(Color.rgb(0, 0, 0));
@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             @Override
             public void onClick(View v) {
                 tab_request.setBackgroundColor(Color.rgb(255, 255, 255));
-                tab_list.setBackgroundColor(Color.rgb(222, 222, 222));
+                tab_list.setBackgroundColor(Color.rgb(242, 242, 242));
                 tab_request.setTextColor(Color.rgb(0, 0, 0));
                 tab_list.setTextColor(Color.rgb(1, 94, 125));
                 tab_req_lay.setVisibility(View.GONE);
