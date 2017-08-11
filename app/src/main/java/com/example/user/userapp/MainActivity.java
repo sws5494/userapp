@@ -663,11 +663,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         }
     }
 
-    public void onCustomClicked(double lat, double lon, int radius) {
+    public void onCustomClicked(double lat, double lon, int radius, int id) {
         HashMap<String, Object> additionalData = new HashMap<>();
         additionalData.put(ADDITIONAL_DATA_TIME, new Date().getTime()); // add a long
         additionalData.put(ADDITIONAL_DATA_PACKAGE, getApplicationContext().getPackageName()); // add a String
-        addGeofence(false, additionalData, lat, lon, radius);
+        addGeofence(false, additionalData, lat, lon, radius, id);
     }
 
     /*public void onDefaultClicked(View view) {
@@ -681,7 +681,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         }
     }
 
-    private void addGeofence(boolean defaultReceiver, HashMap<String, Object> additionalData, double lat, double lon, int radius) {
+    private void addGeofence(boolean defaultReceiver, HashMap<String, Object> additionalData, double lat, double lon, int radius, int id) {
         Log.d("GEO ADD", "GEO ADD");
         String geoId;
         String receiverClassName;
@@ -689,7 +689,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             geoId = GEOFENCE_ID_FOR_DEFAULT_RECEIVER;
             receiverClassName = null;
         } else {
-            geoId = GEOFENCE_ID_FOR_CUSTOM_RECEIVER;
+            geoId = ""+id;
             receiverClassName = CustomTransitionsIntentService.class.getName();
         }
 
@@ -958,7 +958,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 _lat = Double.parseDouble(lat[i]);
                 _lon = Double.parseDouble(lon[i]);
                 _radius = Integer.parseInt(radius[i]);
-                onCustomClicked(_lat, _lon, _radius);
+                onCustomClicked(_lat, _lon, _radius, i);
                 Log.d("TAG", lat[i]);
                 Log.d("TAG", lon[i]);
                 Log.d("TAG", radius[i]);

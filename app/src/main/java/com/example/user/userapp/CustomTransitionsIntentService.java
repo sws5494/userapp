@@ -64,7 +64,7 @@ public class CustomTransitionsIntentService extends IntentService {
                 for (int i = 0; i < triggeringGeo.size(); i++) {
                     Geofence geo = triggeringGeo.get(i);
                     StorableGeofence storableGeofence = manager.getGeofence(geo.getRequestId());
-//                    strBuilder.append(geo.getRequestId());
+                    strBuilder.append("-"+geo.getRequestId());
                     if (storableGeofence != null && storableGeofence.getAdditionalData() != null) {
                         HashMap<String, Object> additionalData = storableGeofence.getAdditionalData();
 //                        strBuilder.append(additionalData.get(MainActivity.ADDITIONAL_DATA_TIME));
@@ -91,10 +91,10 @@ public class CustomTransitionsIntentService extends IntentService {
 //        Log.d("TAGtime", "" + date);
 
         try {
-//            won_insert("http://192.168.64.166:3000/geofence?identifier=" + phoneNumber + "&" + "onoff=" + transitionStr + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
-            won_insert("http://112.185.119.215:3000/geofence?identifier=" + phoneNumber + "&" + "onoff=" + transitionStr + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
-//            won_insert("http://192.168.64.166:3000/user_state?phonenum=" + phoneNumber + "&state=" + transitionStr);
-            won_insert("http://112.185.119.215:3000/user_state?phonenum=" + phoneNumber + "&state=" + transitionStr);
+            won_insert("http://192.168.64.166:3000/geofence?identifier=" + phoneNumber + "&" + "onoff=" + transitionStr + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
+//            won_insert("http://112.185.119.215:3000/geofence?identifier=" + phoneNumber + "&" + "onoff=" + transitionStr + "&" + "time=" + strNow + "&" + "time2=" + strNow2);
+            won_insert("http://192.168.64.166:3000/user_state?phonenum=" + phoneNumber + "&state=" + transitionStr);
+//            won_insert("http://112.185.119.215:3000/user_state?phonenum=" + phoneNumber + "&state=" + transitionStr);
         } catch (Exception e) {
             e.printStackTrace();
         }
