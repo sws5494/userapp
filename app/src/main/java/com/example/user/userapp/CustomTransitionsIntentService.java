@@ -86,6 +86,7 @@ public class CustomTransitionsIntentService extends IntentService {
 //        String identifier = GetDevicesUUID(CustomTransitionsIntentService.this);
         String phoneNumber = phoneNum(CustomTransitionsIntentService.this);
 //
+
 //        Log.d("TAGid", identifier);
 //        Log.d("TAGonoff", transitionStr);
 //        Log.d("TAGtime", "" + date);
